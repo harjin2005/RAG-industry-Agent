@@ -8,13 +8,17 @@ import numpy as np
 if not hasattr(np, 'float_'):
     np.float_ = np.float64
 
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+# Updated imports for Google Gemini
+import google.generativeai as genai
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+
 from langchain_community.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 from langchain.agents import create_openai_tools_agent, AgentExecutor
 from langchain_core.tools import Tool
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -24,27 +28,35 @@ class RAGNewsAgent:
     def __init__(self):
         """Initialize RAG-powered news agent with vector database capabilities"""
         
-        # Initialize LLM with free DeepSeek model
-        self.llm = ChatOpenAI(
-            model="deepseek/deepseek-chat",
+        # Configure Google Gemini (FREE)
+        self.google_api_key = os.getenv("GOOGLE_API_KEY")
+        if not self.google_api_key:
+            raise ValueError("GOOGLE_API_KEY environment variable is required")
+
+        genai.configure(api_key=self.google_api_key)
+
+        # Configure LLM for Google Gemini
+        self.llm = ChatGoogleGenerativeAI(
+            model="gemini-1.5-flash",  # Fast and free model
+            google_api_key=self.google_api_key,
             temperature=0.1,
-            openai_api_key=os.getenv("OPENROUTER_API_KEY"),
-            openai_api_base="https://openrouter.ai/api/v1",
-            max_tokens=2000
+            max_output_tokens=2000
         )
-        
-        # Initialize embeddings for vector creation (RAG component)
-        self.embeddings = OpenAIEmbeddings(
-            openai_api_key=os.getenv("OPENROUTER_API_KEY"),
-            openai_api_base="https://openrouter.ai/api/v1"
+
+        # Configure embeddings for Google Gemini
+        self.embeddings = GoogleGenerativeAIEmbeddings(
+            model="models/text-embedding-004",
+            google_api_key=self.google_api_key
         )
-        
+
+        print("✅ Google Gemini initialized successfully (100% FREE)")
+
         # Initialize text splitter for document chunking
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
             chunk_overlap=200
         )
-        
+
         # Setup vector database for RAG
         self.setup_vector_store()
         self.setup_tools()
@@ -62,6 +74,7 @@ class RAGNewsAgent:
                 embedding_function=self.embeddings,
                 collection_name="news_articles_rag"
             )
+            
             print("✅ Vector store initialized successfully")
         except Exception as e:
             print(f"⚠️ Vector store setup failed: {e}")
@@ -83,7 +96,7 @@ class RAGNewsAgent:
             "entertainment": ["movies", "gaming", "streaming", "media", "Netflix", "entertainment industry"],
             "ev": ["electric vehicles", "tesla", "battery", "charging", "automotive", "clean energy", "electric cars"]
         }
-        
+
         # Get industry-specific keywords
         specific_keywords = industry_keywords.get(industry_clean, [])
         
@@ -124,13 +137,12 @@ class RAGNewsAgent:
             keywords[0],  # Primary keyword
             f'"{industry}"'  # Exact phrase
         ]
-        
+
         all_articles = []
-        
         for strategy_idx, query in enumerate(search_strategies):
             if len(all_articles) >= num_articles:
                 break
-                
+            
             url = "https://api.thenewsapi.com/v1/news/all"
             params = {
                 "api_token": api_key,
@@ -155,10 +167,9 @@ class RAGNewsAgent:
                         if article.get("url") not in existing_urls and len(all_articles) < num_articles:
                             all_articles.append(article)
                             existing_urls.add(article.get("url"))
-                            
             except Exception as e:
                 continue
-        
+
         if all_articles:
             return {
                 "articles": all_articles[:num_articles],
@@ -213,7 +224,6 @@ URL: {article.get('url', '')}
                 
                 # Split into chunks for better vector storage
                 chunks = self.text_splitter.split_text(content.strip())
-                
                 for i, chunk in enumerate(chunks):
                     documents.append(Document(
                         page_content=chunk,
@@ -237,7 +247,7 @@ URL: {article.get('url', '')}
                 
         except Exception as e:
             print(f"Vector storage error: {e}")
-        return 0
+            return 0
 
     def get_rag_context(self, industry: str, k: int = 5) -> list:
         """Retrieve relevant context from vector database (RAG retrieval)"""
@@ -251,12 +261,12 @@ URL: {article.get('url', '')}
                 k=k,
                 filter={"industry": industry}
             )
-            return [
-                {
-                    "content": doc.page_content,
-                    "metadata": doc.metadata
-                } for doc in results
-            ]
+            
+            return [{
+                "content": doc.page_content,
+                "metadata": doc.metadata
+            } for doc in results]
+            
         except:
             return []
 
@@ -291,11 +301,9 @@ URL: {article.get('url', '')}
             
             # Format article
             result += f"**📌 Article {i}: {title}**\n\n"
-            
             if description and description != "No description available":
                 desc_clean = description[:200] + "..." if len(description) > 200 else description
                 result += f"📝 **Summary:** {desc_clean}\n\n"
-            
             result += f"📅 **Published:** {formatted_date}\n"
             result += f"📰 **Source:** {source_name}\n"
             result += f"🔗 **Read More:** {url}\n\n"
@@ -331,10 +339,15 @@ HISTORICAL CONTEXT (from vector database):
 {historical_context}
 
 Provide analysis in this format:
+
 📊 **Sentiment:** [Positive/Negative/Mixed]
+
 📈 **Market Outlook:** [Brief outlook based on current + historical data]
+
 🎯 **Key Trends:** [2-3 main trends from current news]
+
 📚 **Historical Insights:** [How current trends relate to past patterns if available]
+
 💡 **Strategic Insights:** [Actionable recommendations]
 
 Keep it concise and professional."""
@@ -347,10 +360,8 @@ Keep it concise and professional."""
 
     def get_rag_industry_analysis(self, industry: str) -> str:
         """Main RAG analysis function - implements complete RAG pipeline"""
-        
         # Step 1: Fetch fresh articles
         news_result = self.fetch_thenews_api(industry, 10)
-        
         if "error" in news_result:
             return f"❌ {news_result['error']}"
         
@@ -392,16 +403,16 @@ Keep it concise and professional."""
         """Setup LangChain agent with RAG capabilities"""
         prompt = ChatPromptTemplate.from_messages([
             ("system", """You are a professional RAG-powered news analyst. You use:
-            1. Fresh news articles from multiple sources
-            2. Historical context from vector database
-            3. Enhanced analysis combining current + historical data
-            
-            Always provide 10 recent articles with RAG-enhanced insights."""),
+1. Fresh news articles from multiple sources
+2. Historical context from vector database
+3. Enhanced analysis combining current + historical data
+
+Always provide 10 recent articles with RAG-enhanced insights."""),
             MessagesPlaceholder(variable_name="chat_history"),
             ("human", "{input}"),
             MessagesPlaceholder(variable_name="agent_scratchpad")
         ])
-
+        
         agent = create_openai_tools_agent(self.llm, self.tools, prompt)
         self.agent_executor = AgentExecutor.from_agent_and_tools(
             agent=agent,
@@ -433,8 +444,10 @@ def main():
         return
     
     load_dotenv()
-    if not os.getenv("OPENROUTER_API_KEY") or not os.getenv("THENEWS_API_KEY"):
+    
+    if not os.getenv("GOOGLE_API_KEY") or not os.getenv("THENEWS_API_KEY"):
         print("❌ API keys not found in .env file!")
+        print("Required: GOOGLE_API_KEY and THENEWS_API_KEY")
         return
     
     try:
@@ -446,7 +459,6 @@ def main():
     # Clean CLI loop
     while True:
         industry = input("Enter industry: ").strip()
-        
         if industry.lower() == 'quit':
             print("Goodbye!")
             break
