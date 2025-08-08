@@ -868,9 +868,10 @@
                 });
             }
 
-            async initializeStatus() {
-                try {
-                    const response = await fetch('/api/status');
+          async initializeStatus() {
+    try {
+        const response = await fetch('https://rag-industry-agent.onrender.com/api/status');
+                
                     const data = await response.json();
                     
                     if (data.agent_ready) {
@@ -911,7 +912,7 @@
 
                 try {
                     console.log('Sending request to backend...');
-                    const response = await fetch('/api/analyze', {
+                   const response = await fetch('https://rag-industry-agent.onrender.com/api/analyze', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -1269,3 +1270,4 @@
     </script>
 </body>
 </html>
+
