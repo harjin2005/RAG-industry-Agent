@@ -80,7 +80,7 @@ class GroqLLM(LLM):
 
 class RAGNewsAgent:
     def __init__(self):
-        """Initialize RAG-powered news agent with Groq + Local Embeddings"""
+        """Initialize RAG-powered news agent with Groq + Lightweight Embeddings"""
         
         # Configure Groq API (FREE)
         self.groq_api_key = os.getenv("GROQ_API_KEY")
@@ -89,42 +89,58 @@ class RAGNewsAgent:
 
         print("🔑 Initializing with Groq API (FREE & FAST)...")
 
-        # Configure Groq LLM (simplified to avoid dependency conflicts)
+        # Configure Groq LLM
         self.llm = GroqLLM(
             api_key=self.groq_api_key,
             model="llama-3.1-70b-versatile"
         )
 
-        # Remove direct Groq client to avoid conflicts
-        # self.client = Groq(api_key=self.groq_api_key)  # Comment this out
+        # Configure LIGHTWEIGHT embeddings to avoid memory issues
+        print("📊 Initializing lightweight embeddings...")
+        try:
+            # Use smaller, faster model that works better on Render
+            self.embeddings = HuggingFaceEmbeddings(
+                model_name="sentence-transformers/all-MiniLM-L12-v2",  # Smaller model
+                model_kwargs={
+                    'device': 'cpu',
+                    'trust_remote_code': True
+                },
+                encode_kwargs={
+                    'normalize_embeddings': True,
+                    'batch_size': 1  # Process one at a time to save memory
+                }
+            )
+            print("✅ Lightweight embeddings initialized")
+        except Exception as e:
+            print(f"⚠️ Embeddings failed, using simple fallback: {e}")
+            # Fallback: Skip embeddings for now
+            self.embeddings = None
 
-        # Configure local embeddings (100% FREE)
-        print("📊 Initializing local embeddings...")
-        self.embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2",
-            model_kwargs={'device': 'cpu'},
-            encode_kwargs={'normalize_embeddings': True}
-        )
+        print("✅ Groq + Embeddings initialized successfully (100% FREE)")
 
-        print("✅ Groq + Local Embeddings initialized successfully (100% FREE)")
-
-        # Rest of initialization remains the same...
+        # Initialize text splitter
         self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000,
-            chunk_overlap=200
+            chunk_size=500,  # Smaller chunks to save memory
+            chunk_overlap=100
         )
 
+        # Setup vector database (with error handling)
         self.setup_vector_store()
         self.setup_tools()
         self.setup_agent()
 
     def setup_vector_store(self):
-        """Setup ChromaDB vector database for persistent storage"""
+        """Setup ChromaDB with better error handling"""
         try:
+            if self.embeddings is None:
+                print("⚠️ Skipping vector store (no embeddings)")
+                self.vector_store = None
+                return
+                
             self.persist_directory = "./rag_vector_db"
             os.makedirs(self.persist_directory, exist_ok=True)
             
-            # Initialize ChromaDB with persistent storage
+            # Initialize ChromaDB with lightweight settings
             self.vector_store = Chroma(
                 persist_directory=self.persist_directory,
                 embedding_function=self.embeddings,
@@ -133,7 +149,7 @@ class RAGNewsAgent:
             
             print("✅ Vector store initialized successfully")
         except Exception as e:
-            print(f"⚠️ Vector store setup failed: {e}")
+            print(f"⚠️ Vector store setup failed, continuing without RAG: {e}")
             self.vector_store = None
 
     def generate_search_keywords(self, industry: str) -> list:
