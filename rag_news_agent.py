@@ -9,7 +9,6 @@ if not hasattr(np, 'float_'):
     np.float_ = np.float64
 
 # Updated imports for Groq + Local Embeddings
-from groq import Groq
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -27,22 +26,42 @@ warnings.filterwarnings("ignore")
 load_dotenv()
 
 class GroqLLM(LLM):
-    """Custom LLM wrapper for Groq API"""
+    """Simplified Groq LLM wrapper to avoid dependency conflicts"""
     
     def __init__(self, api_key: str, model: str = "llama-3.1-70b-versatile"):
         super().__init__()
-        self.client = Groq(api_key=api_key)
+        self.api_key = api_key
         self.model = model
+        self.base_url = "https://api.groq.com/openai/v1"
     
     def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
         try:
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=2000,
-                temperature=0.1
+            # Use requests instead of Groq client to avoid dependency issues
+            headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            data = {
+                "model": self.model,
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": 2000,
+                "temperature": 0.1
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/chat/completions",
+                headers=headers,
+                json=data,
+                timeout=30
             )
-            return response.choices[0].message.content
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result["choices"][0]["message"]["content"]
+            else:
+                return f"Error: HTTP {response.status_code}"
+                
         except Exception as e:
             return f"Error generating response: {str(e)}"
     
@@ -70,14 +89,14 @@ class RAGNewsAgent:
 
         print("🔑 Initializing with Groq API (FREE & FAST)...")
 
-        # Configure Groq LLM
+        # Configure Groq LLM (simplified to avoid dependency conflicts)
         self.llm = GroqLLM(
             api_key=self.groq_api_key,
-            model="llama-3.1-70b-versatile"  # Free 70B model
+            model="llama-3.1-70b-versatile"
         )
 
-        # Also keep direct Groq client for analysis
-        self.client = Groq(api_key=self.groq_api_key)
+        # Remove direct Groq client to avoid conflicts
+        # self.client = Groq(api_key=self.groq_api_key)  # Comment this out
 
         # Configure local embeddings (100% FREE)
         print("📊 Initializing local embeddings...")
@@ -89,13 +108,12 @@ class RAGNewsAgent:
 
         print("✅ Groq + Local Embeddings initialized successfully (100% FREE)")
 
-        # Initialize text splitter for document chunking
+        # Rest of initialization remains the same...
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=1000,
             chunk_overlap=200
         )
 
-        # Setup vector database for RAG
         self.setup_vector_store()
         self.setup_tools()
         self.setup_agent()
@@ -349,7 +367,7 @@ URL: {article.get('url', '')}
         return result
 
     def analyze_with_rag(self, articles: list, industry: str, rag_context: list) -> str:
-        """Enhanced analysis using RAG with Groq API"""
+        """Enhanced analysis using RAG with direct Groq API calls"""
         if not articles:
             return f"No analysis available for {industry}."
         
@@ -391,14 +409,32 @@ Provide analysis in this format:
 Keep it concise and professional."""
         
         try:
-            # Use Groq API for analysis
-            response = self.client.chat.completions.create(
-                model="llama-3.1-70b-versatile",
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=2000,
-                temperature=0.1
+            # Use direct API call instead of self.client
+            headers = {
+                "Authorization": f"Bearer {self.groq_api_key}",
+                "Content-Type": "application/json"
+            }
+            
+            data = {
+                "model": "llama-3.1-70b-versatile",
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": 2000,
+                "temperature": 0.1
+            }
+            
+            response = requests.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers=headers,
+                json=data,
+                timeout=30
             )
-            return response.choices[0].message.content
+            
+            if response.status_code == 200:
+                result = response.json()
+                return result["choices"][0]["message"]["content"]
+            else:
+                return f"API Error: HTTP {response.status_code}"
+                
         except Exception as e:
             return f"✅ RAG analysis: Found {len(articles)} current articles and {len(rag_context)} historical references for {industry}. Error: {str(e)}"
 
@@ -463,9 +499,9 @@ Always provide 10 recent articles with RAG-enhanced insights."""),
             tools=self.tools,
             verbose=False,
             handle_parsing_errors=True,
-            max_iterations=5,  # Increased from 2 to 5
-            max_execution_time=60,  # Add timeout (60 seconds)
-            early_stopping_method="generate"  # Return partial results if needed
+            max_iterations=5,
+            max_execution_time=60,
+            early_stopping_method="generate"
         )
 
     def analyze(self, industry: str) -> str:
