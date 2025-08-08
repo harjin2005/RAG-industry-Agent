@@ -8,48 +8,86 @@ import numpy as np
 if not hasattr(np, 'float_'):
     np.float_ = np.float64
 
-# Updated imports for Google Gemini
-import google.generativeai as genai
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-
+# Updated imports for Groq + Local Embeddings
+from groq import Groq
+from langchain.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 from langchain.agents import create_openai_tools_agent, AgentExecutor
 from langchain_core.tools import Tool
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.llms.base import LLM
+from typing import Optional, List, Any
+import json
 
 import warnings
 warnings.filterwarnings("ignore")
 
 load_dotenv()
 
+class GroqLLM(LLM):
+    """Custom LLM wrapper for Groq API"""
+    
+    def __init__(self, api_key: str, model: str = "llama-3.1-70b-versatile"):
+        super().__init__()
+        self.client = Groq(api_key=api_key)
+        self.model = model
+    
+    def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=2000,
+                temperature=0.1
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            return f"Error generating response: {str(e)}"
+    
+    @property
+    def _llm_type(self) -> str:
+        return "groq"
+    
+    def invoke(self, prompt: str) -> Any:
+        """For compatibility with newer LangChain versions"""
+        class Response:
+            def __init__(self, content):
+                self.content = content
+        
+        result = self._call(prompt)
+        return Response(result)
+
 class RAGNewsAgent:
     def __init__(self):
-        """Initialize RAG-powered news agent with vector database capabilities"""
+        """Initialize RAG-powered news agent with Groq + Local Embeddings"""
         
-        # Configure Google Gemini (FREE)
-        self.google_api_key = os.getenv("GOOGLE_API_KEY")
-        if not self.google_api_key:
-            raise ValueError("GOOGLE_API_KEY environment variable is required")
+        # Configure Groq API (FREE)
+        self.groq_api_key = os.getenv("GROQ_API_KEY")
+        if not self.groq_api_key:
+            raise ValueError("GROQ_API_KEY environment variable is required")
 
-        genai.configure(api_key=self.google_api_key)
+        print("🔑 Initializing with Groq API (FREE & FAST)...")
 
-        # Configure LLM for Google Gemini
-        self.llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash",  # Fast and free model
-            google_api_key=self.google_api_key,
-            temperature=0.1,
-            max_output_tokens=2000
+        # Configure Groq LLM
+        self.llm = GroqLLM(
+            api_key=self.groq_api_key,
+            model="llama-3.1-70b-versatile"  # Free 70B model
         )
 
-        # Configure embeddings for Google Gemini
-        self.embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/text-embedding-004",
-            google_api_key=self.google_api_key
+        # Also keep direct Groq client for analysis
+        self.client = Groq(api_key=self.groq_api_key)
+
+        # Configure local embeddings (100% FREE)
+        print("📊 Initializing local embeddings...")
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2",
+            model_kwargs={'device': 'cpu'},
+            encode_kwargs={'normalize_embeddings': True}
         )
 
-        print("✅ Google Gemini initialized successfully (100% FREE)")
+        print("✅ Groq + Local Embeddings initialized successfully (100% FREE)")
 
         # Initialize text splitter for document chunking
         self.text_splitter = RecursiveCharacterTextSplitter(
@@ -311,7 +349,7 @@ URL: {article.get('url', '')}
         return result
 
     def analyze_with_rag(self, articles: list, industry: str, rag_context: list) -> str:
-        """Enhanced analysis using RAG (Retrieval-Augmented Generation)"""
+        """Enhanced analysis using RAG with Groq API"""
         if not articles:
             return f"No analysis available for {industry}."
         
@@ -329,7 +367,7 @@ URL: {article.get('url', '')}
                 ctx["content"][:150] for ctx in rag_context[:3]
             ])
         
-        # RAG-enhanced prompt
+        # RAG-enhanced prompt for Groq
         prompt = f"""Analyze the {industry} industry using both current news and historical context:
 
 CURRENT NEWS:
@@ -353,10 +391,16 @@ Provide analysis in this format:
 Keep it concise and professional."""
         
         try:
-            ai_response = self.llm.invoke(prompt)
-            return ai_response.content
-        except:
-            return f"✅ RAG analysis: Found {len(articles)} current articles and {len(rag_context)} historical references for {industry}."
+            # Use Groq API for analysis
+            response = self.client.chat.completions.create(
+                model="llama-3.1-70b-versatile",
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=2000,
+                temperature=0.1
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            return f"✅ RAG analysis: Found {len(articles)} current articles and {len(rag_context)} historical references for {industry}. Error: {str(e)}"
 
     def get_rag_industry_analysis(self, industry: str) -> str:
         """Main RAG analysis function - implements complete RAG pipeline"""
@@ -425,17 +469,13 @@ Always provide 10 recent articles with RAG-enhanced insights."""),
         )
 
     def analyze(self, industry: str) -> str:
-        """Main analysis method with RAG enhancement"""
+        """Main analysis method with Groq + RAG enhancement"""
         try:
-            response = self.agent_executor.invoke({
-                "input": f"Get 10 recent articles with RAG-enhanced analysis for {industry} industry",
-                "chat_history": []
-            })
-            return response["output"]
-        except Exception as e:
-            # Fallback to direct analysis if agent fails
-            print(f"Agent execution failed, using direct analysis: {e}")
+            # Direct RAG analysis (more reliable than agent)
             return self.get_rag_industry_analysis(industry)
+        except Exception as e:
+            print(f"Analysis failed: {e}")
+            return f"Analysis failed for {industry}: {str(e)}"
 
 def main():
     """Clean main function"""
@@ -445,9 +485,9 @@ def main():
     
     load_dotenv()
     
-    if not os.getenv("GOOGLE_API_KEY") or not os.getenv("THENEWS_API_KEY"):
+    if not os.getenv("GROQ_API_KEY") or not os.getenv("THENEWS_API_KEY"):
         print("❌ API keys not found in .env file!")
-        print("Required: GOOGLE_API_KEY and THENEWS_API_KEY")
+        print("Required: GROQ_API_KEY and THENEWS_API_KEY")
         return
     
     try:
