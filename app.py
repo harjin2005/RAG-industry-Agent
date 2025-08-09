@@ -4,64 +4,206 @@ import os
 from rag_news_agent import RAGNewsAgent
 import threading
 import time
+import logging
 
 app = Flask(__name__)
 CORS(app)
 
+# Configure logging for better debugging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # Global agent instance
 agent = None
 agent_initialized = False
+initialization_error = None
 
 def initialize_agent():
-    """Initialize RAG agent in background"""
-    global agent, agent_initialized
-    try:
-        agent = RAGNewsAgent()
-        agent_initialized = True
-        print("✅ RAG Agent initialized for web interface")
-    except Exception as e:
-        print(f"❌ Agent initialization failed: {e}")
-        agent_initialized = True  # Mark as attempted
+    """Initialize RAG agent in background with better error handling"""
+    global agent, agent_initialized, initialization_error
+    max_retries = 3
+    retry_delay = 5
+    
+    for attempt in range(max_retries):
+        try:
+            logger.info(f"🚀 Attempting to initialize RAG Agent (attempt {attempt + 1}/{max_retries})")
+            agent = RAGNewsAgent()
+            agent_initialized = True
+            initialization_error = None
+            logger.info("✅ RAG Agent initialized successfully for web interface")
+            return
+        except Exception as e:
+            error_msg = f"Attempt {attempt + 1} failed: {str(e)}"
+            logger.error(f"❌ {error_msg}")
+            initialization_error = str(e)
+            
+            if attempt < max_retries - 1:
+                logger.info(f"⏳ Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+            else:
+                logger.error("❌ All initialization attempts failed")
+                agent_initialized = True  # Mark as attempted to stop retries
 
-# ✅ FIXED: Initialize agent immediately when app starts
-with app.app_context():
-    threading.Thread(target=initialize_agent, daemon=True).start()
+# Initialize agent when app starts
+logger.info("🎯 Starting RAG News Intelligence Platform...")
+initialization_thread = threading.Thread(target=initialize_agent, daemon=True)
+initialization_thread.start()
 
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')
+    """Serve the main HTML page"""
+    try:
+        return send_from_directory('.', 'index.html')
+    except Exception as e:
+        logger.error(f"Error serving index.html: {e}")
+        return jsonify({'error': 'Could not load main page'}), 500
 
 @app.route('/api/analyze', methods=['POST'])
 def analyze_industry():
+    """Main endpoint for industry analysis with RAG enhancement"""
     try:
+        # Check if request has valid JSON
+        if not request.is_json:
+            return jsonify({'error': 'Request must be JSON'}), 400
+        
         data = request.get_json()
         industry = data.get('industry', '').strip()
         
+        # Validate input
         if not industry:
             return jsonify({'error': 'Industry name is required'}), 400
         
-        if not agent:
-            return jsonify({'error': 'RAG Agent is still initializing. Please try again.'}), 503
+        if len(industry) > 100:
+            return jsonify({'error': 'Industry name too long (max 100 characters)'}), 400
         
-        # Use your existing analyze method
+        # Check agent status
+        if not agent_initialized:
+            return jsonify({
+                'error': 'RAG Agent is still initializing. Please wait and try again.',
+                'retry_after': 10
+            }), 503
+        
+        if not agent:
+            error_detail = f"Agent failed to initialize: {initialization_error}" if initialization_error else "Unknown initialization error"
+            return jsonify({
+                'error': 'RAG Agent initialization failed',
+                'details': error_detail
+            }), 503
+        
+        # Log the analysis request
+        logger.info(f"🔍 Analyzing industry: {industry}")
+        
+        # Perform analysis with timeout protection
+        start_time = time.time()
         result = agent.analyze(industry)
+        analysis_time = time.time() - start_time
+        
+        logger.info(f"✅ Analysis completed for '{industry}' in {analysis_time:.2f}s")
         
         return jsonify({
             'success': True,
             'industry': industry,
             'analysis': result,
-            'timestamp': time.time()
+            'timestamp': time.time(),
+            'analysis_time': round(analysis_time, 2),
+            'server_info': 'RAG-Powered News Intelligence Platform by Harjinder Singh'
         })
         
     except Exception as e:
-        return jsonify({'error': f'Analysis failed: {str(e)}'}), 500
+        logger.error(f"❌ Analysis failed for industry '{industry}': {e}")
+        return jsonify({
+            'error': f'Analysis failed: {str(e)}',
+            'industry': industry if 'industry' in locals() else 'unknown'
+        }), 500
 
 @app.route('/api/status')
 def get_status():
+    """Health check endpoint with detailed status"""
+    try:
+        status_info = {
+            'agent_ready': agent is not None and agent_initialized,
+            'agent_initialized': agent_initialized,
+            'timestamp': time.time(),
+            'server_status': 'running',
+            'platform': 'RAG News Intelligence Platform',
+            'author': 'Harjinder Singh'
+        }
+        
+        # Add initialization error if exists
+        if initialization_error and not agent:
+            status_info['initialization_error'] = initialization_error
+            status_info['retry_available'] = True
+        
+        return jsonify(status_info)
+        
+    except Exception as e:
+        logger.error(f"Status check failed: {e}")
+        return jsonify({
+            'agent_ready': False,
+            'server_status': 'error',
+            'error': str(e),
+            'timestamp': time.time()
+        }), 500
+
+@app.route('/api/retry-init', methods=['POST'])
+def retry_initialization():
+    """Endpoint to manually retry agent initialization"""
+    global agent_initialized
+    
+    if agent and agent_initialized:
+        return jsonify({
+            'message': 'Agent is already initialized',
+            'agent_ready': True
+        })
+    
+    # Reset initialization flag and retry
+    agent_initialized = False
+    initialization_thread = threading.Thread(target=initialize_agent, daemon=True)
+    initialization_thread.start()
+    
     return jsonify({
-        'agent_ready': agent is not None and agent_initialized,
-        'timestamp': time.time()
+        'message': 'Initialization retry started',
+        'agent_ready': False,
+        'check_status_in': 10
+    })
+
+@app.route('/favicon.ico')
+def favicon():
+    """Serve favicon to prevent 404 errors"""
+    return '', 204
+
+@app.errorhandler(404)
+def not_found(error):
+    """Handle 404 errors"""
+    return jsonify({'error': 'Endpoint not found'}), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    """Handle 500 errors"""
+    logger.error(f"Internal server error: {error}")
+    return jsonify({'error': 'Internal server error'}), 500
+
+# Health check for Render deployment
+@app.route('/health')
+def health_check():
+    """Simple health check for deployment platforms"""
+    return jsonify({
+        'status': 'healthy',
+        'timestamp': time.time(),
+        'service': 'RAG News Intelligence Platform'
     })
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Development server configuration
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') == 'development'
+    
+    logger.info(f"🚀 Starting Flask server on port {port}")
+    logger.info(f"🔧 Debug mode: {debug}")
+    
+    app.run(
+        debug=debug,
+        host='0.0.0.0',
+        port=port,
+        threaded=True  # Enable threading for better concurrent handling
+    )
