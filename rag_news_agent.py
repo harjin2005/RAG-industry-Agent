@@ -15,7 +15,7 @@ os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'
 
 # Updated imports for Groq + Local Embeddings
-from langchain_community.embeddings import HuggingFaceEmbeddings  # Fixed import
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
@@ -34,11 +34,12 @@ load_dotenv()
 class GroqLLM(LLM):
     """Simplified Groq LLM wrapper to avoid dependency conflicts"""
     
-    def __init__(self, api_key: str, model: str = "llama-3.1-70b-versatile"):
-        super().__init__()
-        self.api_key = api_key
-        self.model = model
-        self.base_url = "https://api.groq.com/openai/v1"
+    api_key: str
+    model: str = "llama-3.1-70b-versatile"
+    base_url: str = "https://api.groq.com/openai/v1"
+    
+    def __init__(self, api_key: str, model: str = "llama-3.1-70b-versatile", **kwargs):
+        super().__init__(api_key=api_key, model=model, **kwargs)
     
     def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
         try:
