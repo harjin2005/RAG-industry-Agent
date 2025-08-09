@@ -13,10 +13,11 @@ CORS(app)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Global agent instance
+# Global agent instance with thread lock
 agent = None
 agent_initialized = False
 initialization_error = None
+agent_lock = threading.Lock()  # Add thread lock for safety
 
 def initialize_agent():
     """Initialize RAG agent in background with better error handling"""
@@ -27,22 +28,33 @@ def initialize_agent():
     for attempt in range(max_retries):
         try:
             logger.info(f"🚀 Attempting to initialize RAG Agent (attempt {attempt + 1}/{max_retries})")
-            agent = RAGNewsAgent()
-            agent_initialized = True
-            initialization_error = None
+            
+            # Create agent first, then assign atomically
+            temp_agent = RAGNewsAgent()
+            
+            # Use lock to ensure atomic assignment
+            with agent_lock:
+                agent = temp_agent
+                agent_initialized = True
+                initialization_error = None
+            
             logger.info("✅ RAG Agent initialized successfully for web interface")
             return
+            
         except Exception as e:
             error_msg = f"Attempt {attempt + 1} failed: {str(e)}"
             logger.error(f"❌ {error_msg}")
-            initialization_error = str(e)
+            
+            with agent_lock:
+                initialization_error = str(e)
             
             if attempt < max_retries - 1:
                 logger.info(f"⏳ Retrying in {retry_delay} seconds...")
                 time.sleep(retry_delay)
             else:
                 logger.error("❌ All initialization attempts failed")
-                agent_initialized = True  # Mark as attempted to stop retries
+                with agent_lock:
+                    agent_initialized = True  # Mark as attempted to stop retries
 
 # Initialize agent when app starts
 logger.info("🎯 Starting RAG News Intelligence Platform...")
@@ -76,15 +88,32 @@ def analyze_industry():
         if len(industry) > 100:
             return jsonify({'error': 'Industry name too long (max 100 characters)'}), 400
         
-        # Check agent status
-        if not agent_initialized:
+        # Thread-safe agent check with small delay for initialization
+        with agent_lock:
+            current_agent = agent
+            current_initialized = agent_initialized
+            current_error = initialization_error
+        
+        # If agent is still initializing, wait a bit
+        if not current_initialized:
+            logger.info("⏳ Agent still initializing, waiting...")
+            time.sleep(3)  # Wait 3 seconds
+            
+            # Check again after waiting
+            with agent_lock:
+                current_agent = agent
+                current_initialized = agent_initialized
+                current_error = initialization_error
+        
+        # Check agent status after potential wait
+        if not current_initialized:
             return jsonify({
                 'error': 'RAG Agent is still initializing. Please wait and try again.',
                 'retry_after': 10
             }), 503
         
-        if not agent:
-            error_detail = f"Agent failed to initialize: {initialization_error}" if initialization_error else "Unknown initialization error"
+        if not current_agent:
+            error_detail = f"Agent failed to initialize: {current_error}" if current_error else "Unknown initialization error"
             return jsonify({
                 'error': 'RAG Agent initialization failed',
                 'details': error_detail
@@ -95,7 +124,7 @@ def analyze_industry():
         
         # Perform analysis with timeout protection
         start_time = time.time()
-        result = agent.analyze(industry)
+        result = current_agent.analyze(industry)
         analysis_time = time.time() - start_time
         
         logger.info(f"✅ Analysis completed for '{industry}' in {analysis_time:.2f}s")
@@ -110,7 +139,7 @@ def analyze_industry():
         })
         
     except Exception as e:
-        logger.error(f"❌ Analysis failed for industry '{industry}': {e}")
+        logger.error(f"❌ Analysis failed for industry '{industry if 'industry' in locals() else 'unknown'}': {e}")
         return jsonify({
             'error': f'Analysis failed: {str(e)}',
             'industry': industry if 'industry' in locals() else 'unknown'
@@ -120,9 +149,15 @@ def analyze_industry():
 def get_status():
     """Health check endpoint with detailed status"""
     try:
+        # Thread-safe status check
+        with agent_lock:
+            current_agent = agent
+            current_initialized = agent_initialized
+            current_error = initialization_error
+        
         status_info = {
-            'agent_ready': agent is not None and agent_initialized,
-            'agent_initialized': agent_initialized,
+            'agent_ready': current_agent is not None and current_initialized,
+            'agent_initialized': current_initialized,
             'timestamp': time.time(),
             'server_status': 'running',
             'platform': 'RAG News Intelligence Platform',
@@ -130,8 +165,8 @@ def get_status():
         }
         
         # Add initialization error if exists
-        if initialization_error and not agent:
-            status_info['initialization_error'] = initialization_error
+        if current_error and not current_agent:
+            status_info['initialization_error'] = current_error
             status_info['retry_available'] = True
         
         return jsonify(status_info)
@@ -150,14 +185,20 @@ def retry_initialization():
     """Endpoint to manually retry agent initialization"""
     global agent_initialized
     
-    if agent and agent_initialized:
+    with agent_lock:
+        current_agent = agent
+        current_initialized = agent_initialized
+    
+    if current_agent and current_initialized:
         return jsonify({
             'message': 'Agent is already initialized',
             'agent_ready': True
         })
     
     # Reset initialization flag and retry
-    agent_initialized = False
+    with agent_lock:
+        agent_initialized = False
+    
     initialization_thread = threading.Thread(target=initialize_agent, daemon=True)
     initialization_thread.start()
     
