@@ -10,7 +10,10 @@ gunicorn==22.0.0
 tiktoken==0.7.0
 httpx==0.27.0
 groq==0.11.0
-sentence-transformers==2.2.2
 torch==2.1.2
 numpy==1.24.4
 transformers==4.36.0
+# Fix sentence-transformers import issue
+sentence-transformers>=2.2.0
+tokenizers>=0.15.0
+scikit-learn>=1.3.0
