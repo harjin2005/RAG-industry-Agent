@@ -147,8 +147,12 @@ def analyze_industry():
 
 @app.route('/api/status')
 def get_status():
-    """Health check endpoint with detailed status"""
+    """Health check endpoint with detailed debugging info"""
     try:
+        # Check environment variables
+        groq_key_exists = bool(os.getenv("GROQ_API_KEY"))
+        thenews_key_exists = bool(os.getenv("THENEWS_API_KEY"))
+        
         # Thread-safe status check
         with agent_lock:
             current_agent = agent
@@ -161,13 +165,17 @@ def get_status():
             'timestamp': time.time(),
             'server_status': 'running',
             'platform': 'RAG News Intelligence Platform',
-            'author': 'Harjinder Singh'
+            'author': 'Harjinder Singh',
+            # DEBUG INFO - This will show us what's wrong
+            'debug': {
+                'groq_api_key_exists': groq_key_exists,
+                'thenews_api_key_exists': thenews_key_exists,
+                'initialization_error': current_error,
+                'agent_object_exists': current_agent is not None,
+                'python_version': f"{os.sys.version_info.major}.{os.sys.version_info.minor}",
+                'working_directory': os.getcwd()
+            }
         }
-        
-        # Add initialization error if exists
-        if current_error and not current_agent:
-            status_info['initialization_error'] = current_error
-            status_info['retry_available'] = True
         
         return jsonify(status_info)
         
@@ -179,6 +187,7 @@ def get_status():
             'error': str(e),
             'timestamp': time.time()
         }), 500
+
 
 @app.route('/api/retry-init', methods=['POST'])
 def retry_initialization():
@@ -248,3 +257,4 @@ if __name__ == '__main__':
         port=port,
         threaded=True  # Enable threading for better concurrent handling
     )
+
