@@ -8,8 +8,14 @@ import numpy as np
 if not hasattr(np, 'float_'):
     np.float_ = np.float64
 
+# Memory optimization for Render
+import os
+os.environ['TOKENIZERS_PARALLELISM'] = 'false'
+os.environ['OMP_NUM_THREADS'] = '1'
+os.environ['MKL_NUM_THREADS'] = '1'
+
 # Updated imports for Groq + Local Embeddings
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings  # Fixed import
 from langchain_community.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
@@ -95,25 +101,26 @@ class RAGNewsAgent:
             model="llama-3.1-70b-versatile"
         )
 
-        # Configure LIGHTWEIGHT embeddings to avoid memory issues
+        # Configure LIGHTWEIGHT embeddings with better error handling
         print("📊 Initializing lightweight embeddings...")
         try:
-            # Use smaller, faster model that works better on Render
+            # Use even smaller model for Render's memory constraints
             self.embeddings = HuggingFaceEmbeddings(
-                model_name="sentence-transformers/all-MiniLM-L12-v2",  # Smaller model
+                model_name="sentence-transformers/all-MiniLM-L6-v2",  # Even smaller model
                 model_kwargs={
                     'device': 'cpu',
-                    'trust_remote_code': True
+                    'trust_remote_code': False  # Disable for security
                 },
                 encode_kwargs={
                     'normalize_embeddings': True,
-                    'batch_size': 1  # Process one at a time to save memory
+                    'batch_size': 1,  # Very conservative
+                    'show_progress_bar': False
                 }
             )
             print("✅ Lightweight embeddings initialized")
         except Exception as e:
-            print(f"⚠️ Embeddings failed, using simple fallback: {e}")
-            # Fallback: Skip embeddings for now
+            print(f"⚠️ Embeddings initialization failed: {e}")
+            print("🔄 Continuing without vector store (basic mode)")
             self.embeddings = None
 
         print("✅ Groq + Embeddings initialized successfully (100% FREE)")
