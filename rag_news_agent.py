@@ -87,7 +87,7 @@ class GroqLLM(LLM):
 
 class RAGNewsAgent:
     def __init__(self):
-        """Initialize RAG-powered news agent with Groq + Lightweight Embeddings"""
+        """Initialize RAG-powered news agent with Groq + Basic Mode (No Embeddings)"""
         
         # Configure Groq API (FREE)
         self.groq_api_key = os.getenv("GROQ_API_KEY")
@@ -102,29 +102,11 @@ class RAGNewsAgent:
             model="llama-3.1-70b-versatile"
         )
 
-        # Configure LIGHTWEIGHT embeddings with better error handling
-        print("📊 Initializing lightweight embeddings...")
-        try:
-            # Use even smaller model for Render's memory constraints
-            self.embeddings = HuggingFaceEmbeddings(
-                model_name="sentence-transformers/all-MiniLM-L6-v2",  # Even smaller model
-                model_kwargs={
-                    'device': 'cpu',
-                    'trust_remote_code': False  # Disable for security
-                },
-                encode_kwargs={
-                    'normalize_embeddings': True,
-                    'batch_size': 1,  # Very conservative
-                    'show_progress_bar': False
-                }
-            )
-            print("✅ Lightweight embeddings initialized")
-        except Exception as e:
-            print(f"⚠️ Embeddings initialization failed: {e}")
-            print("🔄 Continuing without vector store (basic mode)")
-            self.embeddings = None
+        # Temporarily disable embeddings - use basic mode
+        print("🔄 Running in basic mode (no embeddings)")
+        self.embeddings = None
 
-        print("✅ Groq + Embeddings initialized successfully (100% FREE)")
+        print("✅ Groq initialized successfully in basic mode (100% FREE)")
 
         # Initialize text splitter
         self.text_splitter = RecursiveCharacterTextSplitter(
@@ -141,7 +123,7 @@ class RAGNewsAgent:
         """Setup ChromaDB with better error handling"""
         try:
             if self.embeddings is None:
-                print("⚠️ Skipping vector store (no embeddings)")
+                print("⚠️ Skipping vector store (no embeddings - basic mode)")
                 self.vector_store = None
                 return
                 
@@ -402,38 +384,35 @@ URL: {article.get('url', '')}
             desc = article.get("description", "")
             current_text += f"{title}. {desc} "
         
-        # Prepare historical context from vector database
-        historical_context = ""
+        # In basic mode, no historical context available
+        historical_context = "No historical context available (running in basic mode)"
         if rag_context:
             historical_context = "Historical context: " + " ".join([
                 ctx["content"][:150] for ctx in rag_context[:3]
             ])
         
-        # RAG-enhanced prompt for Groq
-        prompt = f"""Analyze the {industry} industry using both current news and historical context:
+        # Analysis prompt for Groq (basic mode)
+        prompt = f"""Analyze the {industry} industry using current news:
 
 CURRENT NEWS:
 {current_text}
 
-HISTORICAL CONTEXT (from vector database):
 {historical_context}
 
 Provide analysis in this format:
 
 📊 **Sentiment:** [Positive/Negative/Mixed]
 
-📈 **Market Outlook:** [Brief outlook based on current + historical data]
+📈 **Market Outlook:** [Brief outlook based on current news]
 
 🎯 **Key Trends:** [2-3 main trends from current news]
-
-📚 **Historical Insights:** [How current trends relate to past patterns if available]
 
 💡 **Strategic Insights:** [Actionable recommendations]
 
 Keep it concise and professional."""
         
         try:
-            # Use direct API call instead of self.client
+            # Use direct API call for Groq
             headers = {
                 "Authorization": f"Bearer {self.groq_api_key}",
                 "Content-Type": "application/json"
@@ -460,10 +439,10 @@ Keep it concise and professional."""
                 return f"API Error: HTTP {response.status_code}"
                 
         except Exception as e:
-            return f"✅ RAG analysis: Found {len(articles)} current articles and {len(rag_context)} historical references for {industry}. Error: {str(e)}"
+            return f"✅ Basic analysis: Found {len(articles)} current articles for {industry}. Error: {str(e)}"
 
     def get_rag_industry_analysis(self, industry: str) -> str:
-        """Main RAG analysis function - implements complete RAG pipeline"""
+        """Main analysis function - basic mode (no RAG)"""
         # Step 1: Fetch fresh articles
         news_result = self.fetch_thenews_api(industry, 10)
         if "error" in news_result:
@@ -471,47 +450,47 @@ Keep it concise and professional."""
         
         articles = news_result.get("articles", [])
         
-        # Step 2: Store articles in vector database (RAG storage)
-        stored_chunks = self.store_in_vector_db(articles, industry)
+        # Step 2: Skip vector storage in basic mode
+        stored_chunks = 0
         
-        # Step 3: Retrieve historical context (RAG retrieval)
-        rag_context = self.get_rag_context(industry, 5)
+        # Step 3: Skip RAG retrieval in basic mode
+        rag_context = []
         
         # Step 4: Format articles
         formatted_articles = self.format_articles_clean(articles, industry)
         
-        # Step 5: RAG-enhanced analysis
-        rag_analysis = self.analyze_with_rag(articles, industry, rag_context)
+        # Step 5: Basic analysis (no RAG)
+        basic_analysis = self.analyze_with_rag(articles, industry, rag_context)
         
-        # Step 6: Add RAG enhancement info
-        rag_info = f"\n**🧠 RAG Enhancement:**\n"
-        rag_info += f"- Stored {stored_chunks} new chunks in vector database\n"
-        rag_info += f"- Retrieved {len(rag_context)} historical articles for context\n"
-        rag_info += f"- Enhanced analysis with historical patterns\n"
+        # Step 6: Add basic mode info
+        mode_info = f"\n**🔧 Basic Mode:**\n"
+        mode_info += f"- Running without embeddings for better compatibility\n"
+        mode_info += f"- Analyzed {len(articles)} current articles\n"
+        mode_info += f"- Powered by Groq's free Llama 3.1 70B model\n"
         
         # Combine all results
-        result = formatted_articles + "\n" + rag_analysis + rag_info
+        result = formatted_articles + "\n" + basic_analysis + mode_info
         return result
 
     def setup_tools(self):
         """Setup tools for LangChain agent"""
         self.tools = [
             Tool(
-                name="GetRAGIndustryNews",
+                name="GetIndustryNews",
                 func=self.get_rag_industry_analysis,
-                description="Get 10 articles with RAG-enhanced analysis for any industry."
+                description="Get 10 articles with analysis for any industry (basic mode)."
             )
         ]
 
     def setup_agent(self):
-        """Setup LangChain agent with RAG capabilities"""
+        """Setup LangChain agent with basic capabilities"""
         prompt = ChatPromptTemplate.from_messages([
-            ("system", """You are a professional RAG-powered news analyst. You use:
+            ("system", """You are a professional news analyst running in basic mode. You provide:
 1. Fresh news articles from multiple sources
-2. Historical context from vector database
-3. Enhanced analysis combining current + historical data
+2. AI-powered analysis using Groq's Llama 3.1 70B model
+3. Industry insights and trends
 
-Always provide 10 recent articles with RAG-enhanced insights."""),
+Always provide 10 recent articles with professional analysis."""),
             MessagesPlaceholder(variable_name="chat_history"),
             ("human", "{input}"),
             MessagesPlaceholder(variable_name="agent_scratchpad")
@@ -529,9 +508,9 @@ Always provide 10 recent articles with RAG-enhanced insights."""),
         )
 
     def analyze(self, industry: str) -> str:
-        """Main analysis method with Groq + RAG enhancement"""
+        """Main analysis method with Groq (basic mode)"""
         try:
-            # Direct RAG analysis (more reliable than agent)
+            # Direct analysis (no RAG, but still powerful with Groq)
             return self.get_rag_industry_analysis(industry)
         except Exception as e:
             print(f"Analysis failed: {e}")
