@@ -102,8 +102,8 @@ class RAGNewsAgent:
             model="llama-3.1-70b-versatile"
         )
 
-        # Temporarily disable embeddings - use basic mode
-        print("🔄 Running in basic mode (no embeddings)")
+        # Temporarily disable embeddings to fix 503 errors
+        print("🔄 Running in basic mode (no vector embeddings)")
         self.embeddings = None
 
         print("✅ Groq initialized successfully in basic mode (100% FREE)")
