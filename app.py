@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
+import sys
 from rag_news_agent import RAGNewsAgent
 import threading
 import time
@@ -20,7 +21,7 @@ initialization_error = None
 agent_lock = threading.Lock()  # Add thread lock for safety
 
 def initialize_agent():
-    """Initialize RAG agent in background with better error handling"""
+    """Initialize RAG agent with comprehensive error catching"""
     global agent, agent_initialized, initialization_error
     max_retries = 3
     retry_delay = 5
@@ -29,8 +30,20 @@ def initialize_agent():
         try:
             logger.info(f"🚀 Attempting to initialize RAG Agent (attempt {attempt + 1}/{max_retries})")
             
-            # Create agent first, then assign atomically
+            # Add detailed logging for each step
+            logger.info("📝 Step 1: About to import RAGNewsAgent...")
+            
+            # Import and create agent with detailed error catching
+            try:
+                from rag_news_agent import RAGNewsAgent
+                logger.info("📝 Step 2: RAGNewsAgent imported successfully")
+            except Exception as import_error:
+                logger.error(f"❌ Import failed: {import_error}")
+                raise import_error
+            
+            logger.info("📝 Step 3: Creating RAGNewsAgent instance...")
             temp_agent = RAGNewsAgent()
+            logger.info("📝 Step 4: RAGNewsAgent instance created successfully")
             
             # Use lock to ensure atomic assignment
             with agent_lock:
@@ -44,6 +57,8 @@ def initialize_agent():
         except Exception as e:
             error_msg = f"Attempt {attempt + 1} failed: {str(e)}"
             logger.error(f"❌ {error_msg}")
+            logger.error(f"❌ Error type: {type(e).__name__}")
+            logger.error(f"❌ Full error details: {repr(e)}")
             
             with agent_lock:
                 initialization_error = str(e)
@@ -56,10 +71,22 @@ def initialize_agent():
                 with agent_lock:
                     agent_initialized = True  # Mark as attempted to stop retries
 
-# Initialize agent when app starts
+# Initialize agent when app starts - HYBRID APPROACH
 logger.info("🎯 Starting RAG News Intelligence Platform...")
-initialization_thread = threading.Thread(target=initialize_agent, daemon=True)
-initialization_thread.start()
+
+# Try synchronous initialization first
+logger.info("🔄 Attempting synchronous initialization...")
+try:
+    from rag_news_agent import RAGNewsAgent
+    agent = RAGNewsAgent()
+    agent_initialized = True
+    logger.info("✅ Synchronous initialization successful!")
+except Exception as sync_error:
+    logger.error(f"❌ Synchronous initialization failed: {sync_error}")
+    # Fall back to threaded initialization
+    logger.info("🔄 Falling back to threaded initialization...")
+    initialization_thread = threading.Thread(target=initialize_agent, daemon=True)
+    initialization_thread.start()
 
 @app.route('/')
 def index():
@@ -172,8 +199,10 @@ def get_status():
                 'thenews_api_key_exists': thenews_key_exists,
                 'initialization_error': current_error,
                 'agent_object_exists': current_agent is not None,
-                'python_version': f"{os.sys.version_info.major}.{os.sys.version_info.minor}",
-                'working_directory': os.getcwd()
+                'python_version': f"{sys.version_info.major}.{sys.version_info.minor}",
+                'working_directory': os.getcwd(),
+                'environment_vars_count': len([k for k in os.environ.keys() if not k.startswith('_')]),
+                'threading_active_count': threading.active_count()
             }
         }
         
@@ -187,7 +216,6 @@ def get_status():
             'error': str(e),
             'timestamp': time.time()
         }), 500
-
 
 @app.route('/api/retry-init', methods=['POST'])
 def retry_initialization():
@@ -207,6 +235,7 @@ def retry_initialization():
     # Reset initialization flag and retry
     with agent_lock:
         agent_initialized = False
+        initialization_error = None
     
     initialization_thread = threading.Thread(target=initialize_agent, daemon=True)
     initialization_thread.start()
@@ -216,6 +245,38 @@ def retry_initialization():
         'agent_ready': False,
         'check_status_in': 10
     })
+
+@app.route('/api/debug-logs')
+def get_debug_logs():
+    """Endpoint to get recent debug information"""
+    try:
+        debug_info = {
+            'timestamp': time.time(),
+            'system_info': {
+                'python_version': f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+                'working_directory': os.getcwd(),
+                'threading_count': threading.active_count(),
+                'environment_variables': {
+                    'GROQ_API_KEY_SET': bool(os.getenv("GROQ_API_KEY")),
+                    'THENEWS_API_KEY_SET': bool(os.getenv("THENEWS_API_KEY")),
+                    'PYTHON_VERSION': os.getenv("PYTHON_VERSION", "Not set"),
+                    'PORT': os.getenv("PORT", "Not set")
+                }
+            },
+            'agent_status': {
+                'initialized': agent_initialized,
+                'object_exists': agent is not None,
+                'initialization_error': initialization_error
+            }
+        }
+        
+        return jsonify(debug_info)
+        
+    except Exception as e:
+        return jsonify({
+            'error': f'Debug info failed: {str(e)}',
+            'timestamp': time.time()
+        }), 500
 
 @app.route('/favicon.ico')
 def favicon():
@@ -257,4 +318,3 @@ if __name__ == '__main__':
         port=port,
         threaded=True  # Enable threading for better concurrent handling
     )
-
