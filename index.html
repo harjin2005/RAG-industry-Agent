@@ -9,7 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     
     <style>
-        /* Enhanced CSS - All styles embedded with mobile-first approach */
+        /* Color palette and design system variables */
         * {
             margin: 0;
             padding: 0;
@@ -36,18 +36,18 @@
             --glass-bg: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.2);
             
-            /* Enhanced Typography */
+            /* Typography system */
             --text-primary: #f8fafc;
             --text-secondary: #cbd5e1;
             --text-muted: #94a3b8;
             
-            /* Enhanced Spacing */
+            /* Spacing and border radius system */
             --border-radius: 16px;
             --border-radius-lg: 24px;
             --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
             --shadow-lg: 0 35px 60px -12px rgba(0, 0, 0, 0.6);
             
-            /* Animation Variables */
+            /* Animation timing functions */
             --transition-fast: 0.2s ease;
             --transition-normal: 0.3s ease;
             --transition-slow: 0.6s ease;
@@ -61,7 +61,7 @@
             overflow-x: hidden;
         }
 
-        /* Enhanced Developer Credit - Fixed positioning */
+        /* Developer credit with social links integration */
         .developer-credit {
             position: fixed;
             bottom: 20px;
@@ -105,7 +105,7 @@
             }
         }
 
-        /* Social Links Popup */
+        /* Social links popup with hover interaction */
         .social-popup {
             position: fixed;
             bottom: 90px;
@@ -181,7 +181,7 @@
             color: #0077b5;
         }
 
-        /* How to Use Guide */
+        /* User guide system with interactive elements */
         .how-to-use {
             position: fixed;
             top: 20px;
@@ -247,6 +247,7 @@
             line-height: 1.4;
         }
 
+        /* Guide toggle button with accessibility features */
         .guide-toggle {
             position: fixed;
             top: 20px;
@@ -292,7 +293,7 @@
             color: var(--text-primary);
         }
 
-        /* Loading Screen */
+        /* Loading screen with animated brain logo */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -398,7 +399,7 @@
             50% { opacity: 1; }
         }
 
-        /* Particle System */
+        /* Particle system for dynamic background effects */
         .particles-container {
             position: fixed;
             top: 0;
@@ -409,7 +410,7 @@
             z-index: -1;
         }
 
-        /* Enhanced Background */
+        /* Animated background with mesh gradients */
         .animated-bg {
             position: fixed;
             top: 0;
@@ -437,6 +438,7 @@
             66% { transform: rotate(240deg) scale(0.9); }
         }
 
+        /* Floating geometric shapes animation */
         .floating-shapes {
             position: absolute;
             width: 100%;
@@ -510,6 +512,7 @@
             66% { transform: translateY(20px) rotate(240deg); opacity: 0.8; }
         }
 
+        /* Grid overlay for subtle texture */
         .grid-overlay {
             position: absolute;
             width: 100%;
@@ -526,7 +529,7 @@
             100% { transform: translate(50px, 50px); }
         }
 
-        /* Enhanced Navigation */
+        /* Glassmorphism navigation with blur effects */
         .navbar {
             position: fixed;
             top: 0;
@@ -619,10 +622,7 @@
             gap: 1rem;
         }
 
-      
-
-       
-
+        /* Status indicator with real-time updates */
         .nav-status {
             display: flex;
             align-items: center;
@@ -656,7 +656,7 @@
             100% { opacity: 1; }
         }
 
-        /* Enhanced Hero Section */
+        /* Hero section with animated elements */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -711,6 +711,7 @@
             background-clip: text;
         }
 
+        /* Typewriter effect with cursor animation */
         .typewriter {
             position: relative;
             border-right: 4px solid var(--primary-color);
@@ -738,7 +739,7 @@
             100% { opacity: 1; box-shadow: 0 0 30px var(--primary-color); }
         }
 
-        /* Creator Credit in Hero */
+        /* Creator credit in hero section */
         .creator-credit {
             display: block;
             font-size: 1.2rem;
@@ -770,6 +771,7 @@
             line-height: 1.6;
         }
 
+        /* Call-to-action buttons with ripple effects */
         .hero-cta {
             display: flex;
             gap: 1.5rem;
@@ -814,6 +816,7 @@
             transform: translateY(-3px);
         }
 
+        /* Ripple effect for interactive elements */
         .btn-ripple {
             position: absolute;
             border-radius: 50%;
@@ -830,6 +833,7 @@
             }
         }
 
+        /* Responsive grid layout for statistics */
         .hero-stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -883,7 +887,7 @@
             margin-top: 0.25rem;
         }
 
-        /* Enhanced AI Brain Visual */
+        /* AI brain visualization with neural network */
         .hero-visual {
             display: flex;
             justify-content: center;
@@ -933,6 +937,7 @@
             animation: glowPulse 6s ease-in-out infinite;
         }
 
+        /* Rotating rings around brain core */
         .brain-rings {
             position: absolute;
             top: 50%;
@@ -986,6 +991,7 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Neural network nodes with pulsing animation */
         .neural-network {
             position: absolute;
             width: 100%;
@@ -1013,6 +1019,7 @@
             50% { opacity: 1; transform: scale(1.3); }
         }
 
+        /* Connection lines between neural nodes */
         .connection {
             position: absolute;
             background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
@@ -1058,6 +1065,7 @@
             100% { opacity: 0.3; }
         }
 
+        /* Data points flowing through neural network */
         .data-streams {
             position: absolute;
             width: 100%;
@@ -1096,7 +1104,7 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* Floating Info Cards */
+        /* Floating information cards */
         .floating-cards {
             position: absolute;
             width: 100%;
@@ -1141,6 +1149,7 @@
             50% { transform: translateY(-20px); }
         }
 
+        /* Scroll indicator with bouncing animation */
         .hero-scroll-indicator {
             position: absolute;
             bottom: 2rem;
@@ -1168,7 +1177,7 @@
             50% { transform: translateX(-50%) translateY(10px); }
         }
 
-        /* Enhanced Analysis Section */
+        /* Analysis section with glassmorphism background */
         .analysis-section {
             padding: 6rem 0;
             background: rgba(30, 41, 59, 0.3);
@@ -1216,7 +1225,7 @@
             color: var(--text-secondary);
         }
 
-        /* Enhanced Input Section */
+        /* Industry analysis input form with suggestions */
         .analysis-input {
             margin-bottom: 4rem;
         }
@@ -1274,6 +1283,7 @@
             color: var(--primary-color);
         }
 
+        /* Focus line animation for input fields */
         .input-focus-line {
             position: absolute;
             bottom: 0;
@@ -1289,6 +1299,7 @@
             width: 100%;
         }
 
+        /* Auto-complete suggestions dropdown */
         .input-suggestions {
             position: absolute;
             top: 100%;
@@ -1319,6 +1330,7 @@
             border-bottom: none;
         }
 
+        /* Analysis button with loading states */
         .analyze-btn {
             display: flex;
             align-items: center;
@@ -1354,6 +1366,7 @@
             opacity: 0;
         }
 
+        /* Loading spinner for analyze button */
         .btn-loader {
             position: absolute;
             top: 50%;
@@ -1381,6 +1394,7 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Success state for button */
         .btn-success {
             position: absolute;
             top: 50%;
@@ -1399,7 +1413,7 @@
             opacity: 1;
         }
 
-        /* Enhanced Quick Industries */
+        /* Quick industry selection buttons */
         .quick-industries {
             text-align: center;
         }
@@ -1462,7 +1476,7 @@
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
         }
 
-        /* Enhanced Results Container - Mobile Responsive */
+        /* Results display container with mobile responsive design */
         .results-container {
             min-height: 300px;
             background: var(--card-bg);
@@ -1485,6 +1499,7 @@
             background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
         }
 
+        /* Placeholder state for results */
         .results-placeholder {
             display: flex;
             flex-direction: column;
@@ -1508,6 +1523,7 @@
             opacity: 0.6;
         }
 
+        /* Pulsing animation for placeholder icon */
         .icon-pulse {
             position: absolute;
             top: 50%;
@@ -1546,7 +1562,7 @@
             color: var(--accent-color);
         }
 
-        /* Mobile Responsive Results */
+        /* Animated results container */
         .analysis-results.enhanced {
             animation: resultsSlideIn 0.8s ease-out;
         }
@@ -1562,6 +1578,7 @@
             }
         }
 
+        /* Results header with responsive layout */
         .result-header.enhanced {
             display: flex;
             flex-direction: column;
@@ -1606,15 +1623,7 @@
             word-wrap: break-word;
         }
 
-        /* Creator signature in results */
-        .creator-signature {
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            font-weight: 500;
-            margin: 0.25rem 0;
-            font-style: italic;
-        }
-
+        /* Result metadata with responsive layout */
         .result-meta {
             display: flex;
             flex-wrap: wrap;
@@ -1630,6 +1639,7 @@
             white-space: nowrap;
         }
 
+        /* Action buttons for results */
         .header-actions {
             display: flex;
             gap: 0.75rem;
@@ -1661,7 +1671,7 @@
             color: var(--text-primary);
         }
 
-        /* Mobile-First Article Display */
+        /* Clean article display without card layers */
         .article-item {
             margin: 2rem 0;
             padding: 0 0 2rem 0;
@@ -1716,6 +1726,7 @@
             font-size: 1rem;
         }
 
+        /* Article metadata with mobile-first design */
         .article-meta {
             display: flex;
             flex-direction: column;
@@ -1752,7 +1763,7 @@
             text-decoration: underline;
         }
 
-        /* Clean Analysis Sections */
+        /* Analysis sections without emojis */
         .analysis-section {
             margin: 3rem 0;
             padding: 2rem;
@@ -1779,7 +1790,7 @@
             font-size: 1rem;
         }
 
-        /* Enhanced Features Section */
+        /* Feature cards grid layout */
         .features-section {
             padding: 6rem 0;
         }
@@ -1824,6 +1835,7 @@
             box-shadow: var(--shadow-lg);
         }
 
+        /* Featured card with special styling */
         .feature-card.featured {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
             border: 1px solid var(--primary-color);
@@ -1843,6 +1855,7 @@
             box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
         }
 
+        /* Glow effect for featured cards */
         .feature-glow {
             position: absolute;
             top: -50%;
@@ -1908,6 +1921,7 @@
             font-size: 1rem;
         }
 
+        /* Feature list with checkmarks */
         .feature-list {
             list-style: none;
             padding: 0;
@@ -1927,7 +1941,7 @@
             font-size: 0.75rem;
         }
 
-        /* Enhanced Footer */
+        /* Footer with brand information */
         .footer {
             padding: 4rem 0 2rem;
             background: rgba(15, 23, 42, 0.95);
@@ -1977,6 +1991,7 @@
             color: var(--text-secondary);
         }
 
+        /* Footer statistics */
         .footer-stats {
             display: flex;
             gap: 3rem;
@@ -2011,6 +2026,7 @@
             font-size: 0.875rem;
         }
 
+        /* Technology stack indicators */
         .footer-tech {
             display: flex;
             gap: 2rem;
@@ -2029,7 +2045,7 @@
             color: var(--accent-color);
         }
 
-        /* Back to Top Button */
+        /* Back to top button with smooth scrolling */
         .back-to-top {
             position: fixed;
             bottom: 100px;
@@ -2059,7 +2075,7 @@
             box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
         }
 
-        /* Toast Notifications */
+        /* Toast notification system */
         .toast-container {
             position: fixed;
             top: 2rem;
@@ -2106,6 +2122,7 @@
             }
         }
 
+        /* Error handling interface */
         .error-container {
             display: flex;
             flex-direction: column;
@@ -2155,7 +2172,7 @@
             transform: translateY(-2px);
         }
 
-        /* Nav Menu Toggle (Mobile) */
+        /* Mobile navigation toggle */
         .nav-menu-toggle {
             display: none;
             flex-direction: column;
@@ -2173,7 +2190,7 @@
             transition: all 0.3s ease;
         }
 
-        /* Mobile Responsive Design */
+        /* Mobile-first responsive design breakpoints */
         @media (max-width: 1024px) {
             .hero-container {
                 grid-template-columns: 1fr;
@@ -2365,7 +2382,7 @@
             }
         }
 
-        /* Custom Scrollbar */
+        /* Custom scrollbar styling for webkit browsers */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -2383,7 +2400,7 @@
             background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
         }
 
-        /* Selection Styles */
+        /* Text selection styling */
         ::selection {
             background: rgba(99, 102, 241, 0.3);
             color: var(--text-primary);
@@ -2396,13 +2413,13 @@
     </style>
 </head>
 <body>
-    <!-- Developer Credit - Fixed positioning with Social Links -->
+    <!-- Developer credit with social links integration -->
     <a href="https://github.com/harjin2005" class="developer-credit" id="developer-credit" target="_blank" rel="noopener">
         <i class="fas fa-code"></i>
         Developed by Harjinder Singh
     </a>
 
-    <!-- Social Links Popup -->
+    <!-- Social links popup with hover interaction -->
     <div class="social-popup" id="social-popup">
         <h4>Connect with Harjinder Singh</h4>
         <div class="social-links">
@@ -2417,12 +2434,12 @@
         </div>
     </div>
 
-    <!-- How to Use Guide Toggle -->
+    <!-- User guide toggle button with accessibility features -->
     <button class="guide-toggle" id="guide-toggle" title="How to Use">
         <i class="fas fa-question"></i>
     </button>
 
-    <!-- How to Use Guide -->
+    <!-- User guide system with interactive elements -->
     <div class="how-to-use" id="how-to-use">
         <button class="guide-close" id="guide-close">
             <i class="fas fa-times"></i>
@@ -2455,7 +2472,7 @@
         </div>
     </div>
 
-    <!-- Loading Screen -->
+    <!-- Loading screen with animated brain logo -->
     <div class="loading-screen" id="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">
@@ -2477,10 +2494,10 @@
         </div>
     </div>
 
-    <!-- Particle System -->
+    <!-- Particle system for dynamic background effects -->
     <div class="particles-container" id="particles-container"></div>
 
-    <!-- Enhanced Background -->
+    <!-- Animated background with mesh gradients -->
     <div class="animated-bg">
         <div class="mesh-gradient"></div>
         <div class="floating-shapes">
@@ -2494,7 +2511,7 @@
         <div class="grid-overlay"></div>
     </div>
 
-    <!-- Enhanced Navigation -->
+    <!-- Glassmorphism navigation with blur effects -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -2509,11 +2526,12 @@
             </div>
             
             <div class="nav-controls">
-                
+                <!-- Status indicator with real-time updates -->
                 <div class="nav-status" id="status-indicator">
                     <div class="status-dot"></div>
                     <span>Connecting...</span>
                 </div>
+                <!-- Mobile navigation toggle -->
                 <button class="nav-menu-toggle" id="nav-menu-toggle">
                     <span></span>
                     <span></span>
@@ -2523,7 +2541,7 @@
         </div>
     </nav>
 
-    <!-- Enhanced Hero Section -->
+    <!-- Hero section with animated elements -->
     <section class="hero" id="hero">
         <div class="hero-container">
             <div class="hero-content">
@@ -2548,6 +2566,7 @@
                     powered by advanced RAG technology and cutting-edge AI models
                 </p>
                 
+                <!-- Call-to-action buttons with ripple effects -->
                 <div class="hero-cta">
                     <button class="cta-primary" onclick="document.getElementById('analysis-section').scrollIntoView({behavior: 'smooth'})">
                         <span>Start Analysis</span>
@@ -2560,6 +2579,7 @@
                     </button>
                 </div>
                 
+                <!-- Responsive grid layout for statistics -->
                 <div class="hero-stats">
                     <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
                         <div class="stat-icon"><i class="fas fa-newspaper"></i></div>
@@ -2592,6 +2612,7 @@
                 </div>
             </div>
             
+            <!-- AI brain visualization with neural network -->
             <div class="hero-visual" data-aos="fade-left">
                 <div class="ai-brain-container">
                     <div class="ai-brain">
@@ -2622,6 +2643,7 @@
                     <div class="brain-glow"></div>
                 </div>
                 
+                <!-- Floating information cards -->
                 <div class="floating-cards">
                     <div class="info-card card-1">
                         <i class="fas fa-robot"></i>
@@ -2639,13 +2661,14 @@
             </div>
         </div>
         
+        <!-- Scroll indicator with bouncing animation -->
         <div class="hero-scroll-indicator">
             <div class="scroll-arrow"></div>
             <span>Scroll to explore</span>
         </div>
     </section>
 
-    <!-- Enhanced Analysis Section -->
+    <!-- Analysis section with glassmorphism background -->
     <section class="analysis-section" id="analysis-section">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
@@ -2657,7 +2680,7 @@
                 <p>Enter any industry to get comprehensive market analysis with real-time data and AI-powered insights</p>
             </div>
 
-            <!-- Enhanced Input Form -->
+            <!-- Industry analysis input form with suggestions -->
             <div class="analysis-input" data-aos="fade-up" data-aos-delay="200">
                 <div class="input-container">
                     <div class="input-wrapper">
@@ -2672,8 +2695,10 @@
                             >
                             <div class="input-focus-line"></div>
                         </div>
+                        <!-- Auto-complete suggestions dropdown -->
                         <div class="input-suggestions" id="suggestions"></div>
                     </div>
+                    <!-- Analysis button with loading states -->
                     <button class="analyze-btn" id="analyze-btn">
                         <span class="btn-content">
                             <span class="btn-text">Analyze</span>
@@ -2689,7 +2714,7 @@
                     </button>
                 </div>
                 
-                <!-- Enhanced Quick Industries -->
+                <!-- Quick industry selection buttons -->
                 <div class="quick-industries">
                     <span class="quick-label">Quick Select Industries:</span>
                     <div class="quick-grid">
@@ -2745,7 +2770,7 @@
                 </div>
             </div>
 
-            <!-- Enhanced Results Container -->
+            <!-- Results display container with mobile responsive design -->
             <div class="results-container" id="results-container" data-aos="fade-up" data-aos-delay="400">
                 <div class="results-placeholder">
                     <div class="placeholder-icon">
@@ -2773,7 +2798,7 @@
         </div>
     </section>
 
-    <!-- Enhanced Features Section -->
+    <!-- Feature cards grid layout -->
     <section class="features-section" id="features-section">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
@@ -2802,6 +2827,7 @@
                     </ul>
                 </div>
                 
+                <!-- Featured card with special styling -->
                 <div class="feature-card featured" data-aos="fade-up" data-aos-delay="200">
                     <div class="feature-ribbon">
                         <span>Most Popular</span>
@@ -2889,7 +2915,7 @@
         </div>
     </section>
 
-    <!-- Enhanced Footer -->
+    <!-- Footer with brand information -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -2905,6 +2931,7 @@
                         </div>
                     </div>
                     
+                    <!-- Footer statistics -->
                     <div class="footer-stats">
                         <div class="footer-stat">
                             <span class="stat-value">24/7</span>
@@ -2925,6 +2952,7 @@
                     <div class="footer-text">
                         Built with love by Harjinder Singh using Flask, Groq Llama 3.1, and advanced RAG technology
                     </div>
+                    <!-- Technology stack indicators -->
                     <div class="footer-tech">
                         <span class="tech-item">
                             <i class="fas fa-code"></i>
@@ -2944,27 +2972,28 @@
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
+    <!-- Back to top button with smooth scrolling -->
     <button class="back-to-top" id="back-to-top">
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <!-- Toast Container -->
+    <!-- Toast notification system -->
     <div class="toast-container" id="toast-container"></div>
 
-    <!-- Enhanced JavaScript - All embedded -->
+    <!-- JavaScript with realistic developer comments -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         class EnhancedRAGNewsAgent {
             constructor() {
-                // Updated API endpoints to match your app.py backend
-                this.apiUrl = '';  // Will use same domain - your Flask app serves this
+                // Initialize API endpoints and application state
+                this.apiUrl = '';  // Using same domain - Flask app serves this
                 this.particleSystem = null;
                 this.isLoading = false;
                 this.init();
             }
 
             async init() {
+                // Bootstrap application with async initialization
                 await this.initializeApp();
                 this.setupEventListeners();
                 this.initAnimations();
@@ -2977,7 +3006,7 @@
             }
 
             async initializeApp() {
-                // Simulate app initialization
+                // Simulate app initialization delay for better UX
                 return new Promise(resolve => {
                     setTimeout(() => {
                         resolve();
@@ -2989,7 +3018,7 @@
                 const loadingScreen = document.getElementById('loading-screen');
                 loadingScreen.classList.add('hidden');
                 
-                // Remove loading screen from DOM after animation
+                // Clean up DOM after animation completes
                 setTimeout(() => {
                     if (loadingScreen.parentNode) {
                         loadingScreen.parentNode.removeChild(loadingScreen);
@@ -2997,14 +3026,15 @@
                 }, 600);
             }
 
-            initGuide() {
+                        initGuide() {
+                // Initialize user guide system with event handlers
                 const guideToggle = document.getElementById('guide-toggle');
                 const guideClose = document.getElementById('guide-close');
                 const howToUse = document.getElementById('how-to-use');
                 const developerCredit = document.getElementById('developer-credit');
                 const socialPopup = document.getElementById('social-popup');
 
-                // Guide toggle
+                // Guide toggle functionality
                 guideToggle.addEventListener('click', () => {
                     howToUse.classList.toggle('show');
                 });
@@ -3013,7 +3043,7 @@
                     howToUse.classList.remove('show');
                 });
 
-                              // Social popup toggle
+                // Social popup hover interactions
                 let socialTimeout;
                 developerCredit.addEventListener('mouseenter', () => {
                     clearTimeout(socialTimeout);
@@ -3036,7 +3066,7 @@
                     }, 300);
                 });
 
-                // Click to show social popup on mobile
+                // Mobile touch support for social popup
                 developerCredit.addEventListener('click', (e) => {
                     if (window.innerWidth <= 768) {
                         e.preventDefault();
@@ -3044,7 +3074,7 @@
                     }
                 });
 
-                // Close guide when clicking outside
+                // Close interactions when clicking outside
                 document.addEventListener('click', (e) => {
                     if (!howToUse.contains(e.target) && !guideToggle.contains(e.target)) {
                         howToUse.classList.remove('show');
@@ -3056,20 +3086,21 @@
             }
 
             setupEventListeners() {
-                // Analyze button
+                // Bind event handlers for user interactions
                 const analyzeBtn = document.getElementById('analyze-btn');
                 const industryInput = document.getElementById('industry-input');
                 
+                // Handle analysis button clicks
                 analyzeBtn.addEventListener('click', () => this.analyzeIndustry());
                 
-                // Enter key support
+                // Enable enter key submission
                 industryInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         this.analyzeIndustry();
                     }
                 });
 
-                // Quick industry buttons
+                // Quick industry selection handlers
                 document.querySelectorAll('.quick-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const industry = e.currentTarget.dataset.industry;
@@ -3078,19 +3109,19 @@
                     });
                 });
 
-                // Input suggestions
+                // Auto-complete input suggestions
                 industryInput.addEventListener('input', (e) => {
                     this.showSuggestions(e.target.value);
                 });
 
-                // Click outside to hide suggestions
+                // Hide suggestions when clicking outside
                 document.addEventListener('click', (e) => {
                     if (!e.target.closest('.input-wrapper')) {
                         this.hideSuggestions();
                     }
                 });
 
-                // Navbar scroll effect
+                // Navbar scroll effects
                 window.addEventListener('scroll', () => {
                     const navbar = document.getElementById('navbar');
                     if (window.scrollY > 100) {
@@ -3100,7 +3131,7 @@
                     }
                 });
 
-                // Back to top button
+                // Back to top button visibility
                 const backToTopBtn = document.getElementById('back-to-top');
                 window.addEventListener('scroll', () => {
                     if (window.scrollY > 500) {
@@ -3110,6 +3141,7 @@
                     }
                 });
 
+                // Smooth scroll to top
                 backToTopBtn.addEventListener('click', () => {
                     window.scrollTo({
                         top: 0,
@@ -3117,13 +3149,12 @@
                     });
                 });
 
-            
-
-                // Button ripple effects
+                // Initialize button ripple effects
                 this.initRippleEffects();
             }
 
             initRippleEffects() {
+                // Add ripple effects to primary buttons
                 document.querySelectorAll('.cta-primary').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         this.createRipple(e, btn);
@@ -3132,6 +3163,7 @@
             }
 
             createRipple(event, button) {
+                // Create ripple effect on button click
                 const ripple = document.createElement('div');
                 const rect = button.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
@@ -3145,24 +3177,21 @@
                 
                 button.appendChild(ripple);
                 
+                // Clean up ripple element after animation
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
             }
 
             initAnimations() {
-                // Enhanced typewriter effect
+                // Initialize all page animations
                 this.typewriterEffect();
-                
-                // Counter animations with intersection observer
                 this.animateCounters();
-                
-                // Scroll reveal animations
                 this.setupScrollReveal();
             }
 
             typewriterEffect() {
-                // Keep typewriter clean - your name is displayed permanently below
+                // Typewriter animation for hero title
                 const words = [
                     'Industry Analysis',
                     'Market Intelligence',
@@ -3203,10 +3232,12 @@
                     setTimeout(type, typeSpeed);
                 };
                 
+                // Start typewriter effect after short delay
                 setTimeout(type, 1000);
             }
 
             animateCounters() {
+                // Animate statistics counters on scroll
                 const counters = document.querySelectorAll('.stat-number');
                 
                 const observerOptions = {
@@ -3227,6 +3258,7 @@
             }
 
             animateCounter(counter) {
+                // Smooth counter animation to target value
                 const target = parseInt(counter.getAttribute('data-target'));
                 const increment = target / 100;
                 let current = 0;
@@ -3245,14 +3277,13 @@
             }
 
             setupScrollReveal() {
+                // Fallback scroll reveal for elements without AOS
                 const revealElements = document.querySelectorAll('[data-aos]');
                 
                 if (typeof AOS !== 'undefined') {
-                    // AOS is loaded, use it
-                    return;
+                    return; // AOS library handles this
                 }
                 
-                // Fallback scroll reveal
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -3271,6 +3302,7 @@
             }
 
             initParticleSystem() {
+                // Create background particle animation system
                 const particlesContainer = document.getElementById('particles-container');
                 const particleCount = 50;
                 
@@ -3280,27 +3312,29 @@
             }
 
             createParticle(container) {
+                // Generate individual particle with random properties
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 
-                // Random position
+                // Random initial position
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.top = Math.random() * 100 + '%';
                 
-                // Random animation duration
+                // Random animation timing
                 particle.style.animationDuration = (Math.random() * 10 + 5) + 's';
                 particle.style.animationDelay = Math.random() * 5 + 's';
                 
-                // Random opacity
+                // Random opacity for depth effect
                 particle.style.opacity = Math.random() * 0.5 + 0.2;
                 
                 container.appendChild(particle);
                 
-                // Animate particle
+                // Start particle animation
                 this.animateParticle(particle);
             }
 
             animateParticle(particle) {
+                // Create floating animation for particle
                 const moveX = (Math.random() - 0.5) * 200;
                 const moveY = (Math.random() - 0.5) * 200;
                 
@@ -3316,6 +3350,7 @@
             }
 
             initAOS() {
+                // Initialize AOS scroll animations if library is loaded
                 if (typeof AOS !== 'undefined') {
                     AOS.init({
                         duration: 800,
@@ -3328,18 +3363,20 @@
 
             async checkStatus() {
                 try {
-                    // Updated to match your app.py endpoints
+                    // Poll backend health endpoint
                     const response = await fetch('/api/status');
                     const data = await response.json();
                     
                     this.updateStatusIndicator(data.agent_ready);
                 } catch (error) {
+                    // Handle connection errors gracefully
                     console.error('Status check failed:', error);
                     this.updateStatusIndicator(false, true);
                 }
             }
 
             updateStatusIndicator(isReady, isError = false) {
+                // Update navigation status indicator
                 const statusIndicator = document.getElementById('status-indicator');
                 const statusDot = statusIndicator.querySelector('.status-dot');
                 const statusText = statusIndicator.querySelector('span');
@@ -3358,12 +3395,14 @@
             }
 
             startStatusPolling() {
+                // Periodic status checks every 15 seconds
                 setInterval(() => {
                     this.checkStatus();
                 }, 15000);
             }
 
             showSuggestions(query) {
+                // Display auto-complete suggestions for industry input
                 if (!query.trim()) {
                     this.hideSuggestions();
                     return;
@@ -3390,7 +3429,7 @@
                     
                     suggestionsContainer.style.display = 'block';
                     
-                    // Add click listeners to suggestions
+                    // Bind click handlers to suggestion items
                     suggestionsContainer.querySelectorAll('.suggestion-item').forEach(item => {
                         item.addEventListener('click', (e) => {
                             document.getElementById('industry-input').value = e.target.dataset.suggestion;
@@ -3403,11 +3442,13 @@
             }
 
             hideSuggestions() {
+                // Hide auto-complete suggestions dropdown
                 const suggestionsContainer = document.getElementById('suggestions');
                 suggestionsContainer.style.display = 'none';
             }
 
             async analyzeIndustry() {
+                // Prevent multiple concurrent requests
                 if (this.isLoading) return;
                 
                 const industryInput = document.getElementById('industry-input');
@@ -3416,23 +3457,24 @@
                 
                 const industry = industryInput.value.trim();
                 
+                // Validate user input
                 if (!industry) {
                     this.showToast('Please enter an industry name', 'warning');
                     industryInput.focus();
                     return;
                 }
 
-                // Show loading state
+                // Set loading state and show progress indicators
                 this.isLoading = true;
                 analyzeBtn.classList.add('loading');
                 resultsContainer.innerHTML = this.getAdvancedLoadingHTML();
                 this.hideSuggestions();
                 
-                // Start loading animation
+                // Start animated loading steps
                 this.startLoadingSteps();
                 
                 try {
-                    // Updated to match your app.py endpoints
+                    // Send analysis request to backend
                     const response = await fetch('/api/analyze', {
                         method: 'POST',
                         headers: {
@@ -3443,19 +3485,23 @@
                     
                     const data = await response.json();
                     
+                    // Process successful response
                     if (data.success) {
                         this.displayResults(data);
                         this.showSuccessState(analyzeBtn);
                         this.showToast(`Analysis completed for ${industry}!`, 'success');
                     } else {
+                        // Handle API errors
                         this.showError(data.error || 'Analysis failed');
                         this.showToast(data.error || 'Analysis failed', 'error');
                     }
                 } catch (error) {
+                    // Handle network and parsing errors
                     console.error('Analysis failed:', error);
                     this.showError('Connection failed. Please check your internet connection and try again.');
                     this.showToast('Connection failed. Please try again.', 'error');
                 } finally {
+                    // Clean up loading state
                     this.isLoading = false;
                     analyzeBtn.classList.remove('loading');
                     
@@ -3467,15 +3513,17 @@
             }
 
             showSuccessState(button) {
+                // Show success animation on button
                 button.classList.add('success');
                 
-                // Add success haptic feedback if available
+                // Add haptic feedback if available
                 if (navigator.vibrate) {
                     navigator.vibrate(100);
                 }
             }
 
             startLoadingSteps() {
+                // Animate loading steps sequentially
                 const steps = document.querySelectorAll('.loading-step');
                 let currentStep = 0;
                 
@@ -3493,6 +3541,7 @@
             }
 
             getAdvancedLoadingHTML() {
+                // Generate advanced loading interface
                 const industry = document.getElementById('industry-input').value;
                 
                 return `
@@ -3780,6 +3829,7 @@
             }
 
             displayResults(data) {
+                // Display analysis results with enhanced formatting
                 const resultsContainer = document.getElementById('results-container');
                 const timestamp = new Date(data.timestamp * 1000).toLocaleString();
                 
@@ -3795,7 +3845,6 @@
                                 </div>
                                 <div class="header-content">
                                     <h3>${data.industry} Industry Analysis</h3>
-                                    <div class="creator-signature">Analysis by Harjinder Singh</div>
                                     <div class="result-meta">
                                         <span class="timestamp">
                                             <i class="fas fa-clock"></i>
@@ -3823,7 +3872,7 @@
                     </div>
                 `;
                 
-                // Add scroll reveal animation to results
+                // Animate results entrance
                 const resultsElement = resultsContainer.querySelector('.analysis-results');
                 resultsElement.style.opacity = '0';
                 resultsElement.style.transform = 'translateY(30px)';
@@ -3836,24 +3885,26 @@
             }
 
             parseAnalysisContent(content) {
-                // Enhanced content parsing with better formatting - NO EMOJIS
+                // Parse and format API response content without emojis
                 return content
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    // Remove emoji-based article formatting and create cleaner article display
+                    // Convert article blocks to structured HTML
                     .replace(/📌 Article (\d+): (.*?)(?=\n|$)/g, '<div class="article-item"><div class="article-header"><span class="article-number">Article $1</span><h4>$2</h4></div>')
                     .replace(/📝 \*\*Summary:\*\* (.*?)(?=\n|$)/g, '<div class="article-content"><p><strong>Summary:</strong> $1</p></div>')
                     .replace(/📅 \*\*Published:\*\* (.*?)(?=\n|$)/g, '<div class="article-meta"><span class="meta-item"><strong>Published:</strong> $1</span>')
                     .replace(/📰 \*\*Source:\*\* (.*?)(?=\n|$)/g, '<span class="meta-item"><strong>Source:</strong> $1</span>')
                     .replace(/🔗 \*\*Read More:\*\* (.*?)(?=\n|$)/g, '<span class="meta-item"><a href="$1" class="article-link" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> Read Full Article</a></span></div></div>')
-                    // Remove emojis from analysis sections
+                    // Process analysis sections without emojis
                     .replace(/📊 \*\*Sentiment:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><h4>Sentiment Analysis</h4></div><div class="section-content">$1</div></div>')
                     .replace(/📈 \*\*Market Outlook:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><h4>Market Outlook</h4></div><div class="section-content">$1</div></div>')
                     .replace(/🎯 \*\*Key Trends:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><h4>Key Trends</h4></div><div class="section-content">$1</div></div>')
                     .replace(/💡 \*\*Strategic Insights:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><h4>Strategic Insights</h4></div><div class="section-content">$1</div></div>')
+                    // Convert line breaks to HTML
                     .replace(/\n/g, '<br>');
             }
 
             showError(message) {
+                // Display error interface with retry option
                 const resultsContainer = document.getElementById('results-container');
                 resultsContainer.innerHTML = `
                     <div class="error-container">
@@ -3871,6 +3922,7 @@
             }
 
             showToast(message, type = 'info') {
+                // Display user notification with auto-dismiss
                 const toastContainer = document.getElementById('toast-container');
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
@@ -3891,7 +3943,7 @@
                 
                 toastContainer.appendChild(toast);
                 
-                // Auto remove after 4 seconds
+                // Auto-remove notification after delay
                 setTimeout(() => {
                     if (toast.parentNode) {
                         toast.style.transform = 'translateX(100%)';
@@ -3904,10 +3956,12 @@
             }
 
             exportResults() {
+                // Placeholder for export functionality
                 this.showToast('Export functionality coming soon!', 'info');
             }
 
             shareResults() {
+                // Native Web Share API with fallback
                 if (navigator.share) {
                     navigator.share({
                         title: 'Industry Analysis Results by Harjinder Singh',
@@ -3915,7 +3969,7 @@
                         url: window.location.href
                     });
                 } else {
-                    // Fallback for browsers that don't support Web Share API
+                    // Fallback to clipboard copy
                     const url = window.location.href;
                     navigator.clipboard.writeText(url).then(() => {
                         this.showToast('Link copied to clipboard!', 'success');
@@ -3926,7 +3980,7 @@
             }
         }
 
-        // Initialize the enhanced application
+        // Initialize application when DOM is ready
         document.addEventListener('DOMContentLoaded', () => {
             window.ragAgent = new EnhancedRAGNewsAgent();
         });
