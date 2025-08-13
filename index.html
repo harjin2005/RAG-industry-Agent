@@ -61,6 +61,45 @@
             overflow-x: hidden;
         }
 
+        /* Developer Credit - Sticky positioned */
+        .developer-credit {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 9999;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: creditPulse 3s ease-in-out infinite;
+        }
+
+        .developer-credit:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .developer-credit i {
+            margin-right: 0.5rem;
+            color: #ffd700;
+        }
+
+        @keyframes creditPulse {
+            0%, 100% { 
+                box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            }
+            50% { 
+                box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+            }
+        }
+
         /* Loading Screen */
         .loading-screen {
             position: fixed;
@@ -520,6 +559,35 @@
         @keyframes cursorGlow {
             0% { opacity: 0.8; box-shadow: 0 0 20px var(--primary-color); }
             100% { opacity: 1; box-shadow: 0 0 30px var(--primary-color); }
+        }
+
+        /* Creator Credit in Hero */
+        .creator-credit {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-top: 1rem;
+            opacity: 0;
+            font-style: italic;
+            text-align: left;
+            animation: fadeInCredit 1s ease-out 2s both;
+        }
+
+        .creator-credit::before {
+            content: "👨‍💻 ";
+            margin-right: 0.5rem;
+        }
+
+        @keyframes fadeInCredit {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero-subtitle {
@@ -1557,7 +1625,7 @@
         /* Back to Top Button */
         .back-to-top {
             position: fixed;
-            bottom: 2rem;
+            bottom: 100px;
             right: 2rem;
             width: 56px;
             height: 56px;
@@ -1631,123 +1699,6 @@
             }
         }
 
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .hero-container {
-                grid-template-columns: 1fr;
-                gap: 4rem;
-                text-align: center;
-            }
-            
-            .hero-title {
-                font-size: 3rem;
-            }
-            
-            .hero-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .ai-brain-container {
-                width: 400px;
-                height: 400px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .hero-cta {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .input-container {
-                flex-direction: column;
-            }
-            
-            .quick-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-main,
-            .footer-bottom {
-                flex-direction: column;
-                gap: 2rem;
-                text-align: center;
-            }
-            
-            .footer-stats {
-                gap: 2rem;
-            }
-            
-            .nav-container {
-                padding: 0 1rem;
-            }
-            
-            .container {
-                padding: 0 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .section-header h2 {
-                font-size: 2rem;
-            }
-            
-            .hero-stats {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            
-            .quick-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .ai-brain-container {
-                width: 300px;
-                height: 300px;
-            }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--darker-bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
-        }
-
-        /* Selection Styles */
-        ::selection {
-            background: rgba(99, 102, 241, 0.3);
-            color: var(--text-primary);
-        }
-
-        ::-moz-selection {
-            background: rgba(99, 102, 241, 0.3);
-            color: var(--text-primary);
-        }
-
         /* Results Specific Styles */
         .analysis-results.enhanced {
             animation: resultsSlideIn 0.8s ease-out;
@@ -1797,6 +1748,19 @@
             font-weight: 700;
             color: var(--text-primary);
             margin: 0 0 0.5rem;
+        }
+
+        /* Creator signature in results */
+        .creator-signature {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            font-weight: 500;
+            margin: 0.25rem 0;
+            font-style: italic;
+        }
+
+        .creator-signature::before {
+            content: "👨‍💻 ";
         }
 
         .result-meta {
@@ -2028,7 +1992,73 @@
             transition: all 0.3s ease;
         }
 
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ai-brain-container {
+                width: 400px;
+                height: 400px;
+            }
+
+            .creator-credit {
+                text-align: center;
+            }
+        }
+
         @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .input-container {
+                flex-direction: column;
+            }
+            
+            .quick-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-main,
+            .footer-bottom {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .footer-stats {
+                gap: 2rem;
+            }
+            
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
             .nav-menu-toggle {
                 display: flex;
             }
@@ -2036,10 +2066,81 @@
             .nav-controls {
                 gap: 0.5rem;
             }
+
+            .developer-credit {
+                bottom: 10px;
+                left: 10px;
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .back-to-top {
+                bottom: 80px;
+                right: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-brain-container {
+                width: 300px;
+                height: 300px;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
+        }
+
+        /* Selection Styles */
+        ::selection {
+            background: rgba(99, 102, 241, 0.3);
+            color: var(--text-primary);
+        }
+
+        ::-moz-selection {
+            background: rgba(99, 102, 241, 0.3);
+            color: var(--text-primary);
         }
     </style>
 </head>
 <body>
+    <!-- Developer Credit - Fixed positioning -->
+    <div class="developer-credit" onclick="window.open('https://github.com/harjinder-singh', '_blank')" title="Click to visit developer profile">
+        <i class="fas fa-code"></i>
+        Developed by Harjinder Singh
+    </div>
+
     <!-- Loading Screen -->
     <div class="loading-screen" id="loading-screen">
         <div class="loading-content">
@@ -2128,6 +2229,7 @@
                         <span class="typewriter" id="typewriter-text">Industry Analysis</span>
                         <div class="cursor-glow"></div>
                     </span>
+                    <span class="creator-credit">Created by Harjinder Singh</span>
                 </h1>
                 
                 <p class="hero-subtitle">
@@ -2510,7 +2612,7 @@
                 
                 <div class="footer-bottom">
                     <div class="footer-text">
-                        Built with ❤️ using Flask, Groq Llama 3.1, and advanced RAG technology
+                        Built with ❤️ by Harjinder Singh using Flask, Groq Llama 3.1, and advanced RAG technology
                     </div>
                     <div class="footer-tech">
                         <span class="tech-item">
@@ -2694,6 +2796,7 @@
             }
 
             typewriterEffect() {
+                // Keep typewriter clean - your name is displayed permanently below
                 const words = [
                     'Industry Analysis',
                     'Market Intelligence',
@@ -3059,7 +3162,7 @@
                                 </div>
                                 <div class="step-content">
                                     <h4>Searching News Sources</h4>
-                                                                        <p>Fetching latest articles from trusted sources</p>
+                                    <p>Fetching latest articles from trusted sources</p>
                                 </div>
                             </div>
                             <div class="loading-step">
@@ -3110,7 +3213,7 @@
                             margin-bottom: 3rem;
                         }
                         
-                        .loading-brain {
+                                                .loading-brain {
                             width: 120px;
                             height: 120px;
                             margin: 0 auto 2rem;
@@ -3303,6 +3406,7 @@
                             </div>
                             <div class="header-content">
                                 <h3>${data.industry} Industry Analysis</h3>
+                                <div class="creator-signature">Analysis by Harjinder Singh</div>
                                 <div class="result-meta">
                                     <span class="timestamp">
                                         <i class="fas fa-clock"></i>
@@ -3414,8 +3518,8 @@
             shareResults() {
                 if (navigator.share) {
                     navigator.share({
-                        title: 'Industry Analysis Results',
-                        text: 'Check out this AI-powered industry analysis!',
+                        title: 'Industry Analysis Results by Harjinder Singh',
+                        text: 'Check out this AI-powered industry analysis created by Harjinder Singh!',
                         url: window.location.href
                     });
                 } else {
@@ -3431,4 +3535,3 @@
     </script>
 </body>
 </html>
-
