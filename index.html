@@ -575,7 +575,7 @@
         }
 
         .creator-credit::before {
-            content: "👨‍💻 ";
+            content: " ";
             margin-right: 0.5rem;
         }
 
@@ -2132,6 +2132,131 @@
             background: rgba(99, 102, 241, 0.3);
             color: var(--text-primary);
         }
+        /* Clean Article Display - No Cards/Layers */
+.article-item {
+    margin: 1.5rem 0;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1.5rem;
+    transition: none;
+}
+
+.article-item:hover {
+    background: none;
+    transform: none;
+}
+
+.article-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.article-number {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.article-header h4 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.article-content {
+    margin: 1rem 0;
+}
+
+.article-content p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.meta-item strong {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.article-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.article-link:hover {
+    color: var(--accent-light);
+    text-decoration: underline;
+}
+
+/* Remove old article-card styles */
+.article-card {
+    display: none;
+}
+
+/* Clean Analysis Sections - Remove Icons */
+.analysis-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.analysis-section .section-header {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.analysis-section .section-header i {
+    display: none;
+}
+
+.analysis-section .section-header h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.analysis-section .section-content {
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
     </style>
 </head>
 <body>
@@ -2215,10 +2340,7 @@
     <section class="hero" id="hero">
         <div class="hero-container">
             <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-sparkles"></i>
-                    <span>Powered by Groq Llama 3.1 70B</span>
-                </div>
+                
                 
                 <h1 class="hero-title">
                     <span class="title-line">
@@ -2963,7 +3085,7 @@
             async checkStatus() {
                 try {
                     // Updated to match your app.py endpoints
-                    const response = await fetch('/api/status');
+                    const response = await fetch('/status');
                     const data = await response.json();
                     
                     this.updateStatusIndicator(data.agent_ready);
@@ -3067,7 +3189,7 @@
                 
                 try {
                     // Updated to match your app.py endpoints
-                    const response = await fetch('/api/analyze', {
+                    const response = await fetch('/analyze', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -3445,21 +3567,24 @@
                 });
             }
 
-            parseAnalysisContent(content) {
-                // Enhanced content parsing with better formatting
-                return content
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/📌 Article (\d+): (.*?)(?=\n|$)/g, '<div class="article-card"><h4><span class="article-number">$1</span>$2</h4>')
-                    .replace(/📝 \*\*Summary:\*\* (.*?)(?=\n|$)/g, '<div class="article-summary"><p>$1</p></div>')
-                    .replace(/📅 \*\*Published:\*\* (.*?)(?=\n|$)/g, '<div class="article-meta"><span class="meta-item"><i class="fas fa-calendar"></i>$1</span>')
-                    .replace(/📰 \*\*Source:\*\* (.*?)(?=\n|$)/g, '<span class="meta-item"><i class="fas fa-newspaper"></i>$1</span>')
-                    .replace(/🔗 \*\*Read More:\*\* (.*?)(?=\n|$)/g, '<span class="meta-item"><a href="$1" class="article-link" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Read Full Article</a></span></div></div>')
-                    .replace(/📊 \*\*Sentiment:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><i class="fas fa-smile"></i><h4>Sentiment Analysis</h4></div><div class="section-content">$1</div></div>')
-                    .replace(/📈 \*\*Market Outlook:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><i class="fas fa-chart-line"></i><h4>Market Outlook</h4></div><div class="section-content">$1</div></div>')
-                    .replace(/🎯 \*\*Key Trends:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><i class="fas fa-bullseye"></i><h4>Key Trends</h4></div><div class="section-content">$1</div></div>')
-                    .replace(/💡 \*\*Strategic Insights:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><i class="fas fa-lightbulb"></i><h4>Strategic Insights</h4></div><div class="section-content">$1</div></div>')
-                    .replace(/\n/g, '<br>');
-            }
+           parseAnalysisContent(content) {
+    // Enhanced content parsing with better formatting - NO EMOJIS
+    return content
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // Remove emoji-based article formatting and create cleaner article display
+        .replace(/📌 Article (\d+): (.*?)(?=\n|$)/g, '<div class="article-item"><div class="article-header"><span class="article-number">Article $1</span><h4>$2</h4></div>')
+        .replace(/📝 \*\*Summary:\*\* (.*?)(?=\n|$)/g, '<div class="article-content"><p><strong>Summary:</strong> $1</p></div>')
+        .replace(/📅 \*\*Published:\*\* (.*?)(?=\n|$)/g, '<div class="article-meta"><span class="meta-item"><strong>Published:</strong> $1</span>')
+        .replace(/📰 \*\*Source:\*\* (.*?)(?=\n|$)/g, '<span class="meta-item"><strong>Source:</strong> $1</span>')
+        .replace(/🔗 \*\*Read More:\*\* (.*?)(?=\n|$)/g, '<span class="meta-item"><a href="$1" class="article-link" target="_blank" rel="noopener">Read Full Article</a></span></div></div>')
+        // Remove emojis from analysis sections
+        .replace(/📊 \*\*Sentiment:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><h4>Sentiment Analysis</h4></div><div class="section-content">$1</div></div>')
+        .replace(/📈 \*\*Market Outlook:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><h4>Market Outlook</h4></div><div class="section-content">$1</div></div>')
+        .replace(/🎯 \*\*Key Trends:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><h4>Key Trends</h4></div><div class="section-content">$1</div></div>')
+        .replace(/💡 \*\*Strategic Insights:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><h4>Strategic Insights</h4></div><div class="section-content">$1</div></div>')
+        .replace(/\n/g, '<br>');
+}
+
 
             showError(message) {
                 const resultsContainer = document.getElementById('results-container');
