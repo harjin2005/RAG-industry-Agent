@@ -3,865 +3,3432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAG News Intelligence Platform</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>RAG News Agent - AI-Powered Industry Analysis</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     
     <style>
+        /* Enhanced CSS - All styles embedded */
         * {
-            box-sizing: border-box;
-        }
-        
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 8px;
-        }
-        
-        /* Responsive breakpoints for all devices */
-        
-        /* Mobile phones (portrait) */
-        @media (min-width: 320px) {
-            .container { padding: 8px; }
-        }
-        
-        /* Mobile phones (landscape) and small tablets */
-        @media (min-width: 576px) {
-            .container { padding: 12px; }
-        }
-        
-        /* Tablets (portrait) - iPad */
-        @media (min-width: 768px) {
-            .container { padding: 16px; }
-        }
-        
-        /* Tablets (landscape) - iPad Pro */
-        @media (min-width: 992px) {
-            .container { padding: 20px; }
-        }
-        
-        /* Laptops and desktops */
-        @media (min-width: 1200px) {
-            .container { padding: 24px; }
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .header h1 {
-            margin: 0 0 8px 0;
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        
-        .header p {
-            margin: 0;
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        /* Header responsive sizes */
-        @media (min-width: 576px) {
-            .header h1 { font-size: 1.5rem; }
-            .header p { font-size: 1rem; }
-        }
-        
-        @media (min-width: 768px) {
-            .header {
-                padding: 20px;
-                margin-bottom: 20px;
-            }
-            .header h1 { font-size: 1.8rem; }
-        }
-        
-        @media (min-width: 1200px) {
-            .header {
-                padding: 24px;
-                margin-bottom: 24px;
-            }
-            .header h1 { font-size: 2rem; }
-        }
-        
-        .analysis-form {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .analysis-form {
-                padding: 25px;
-                margin-bottom: 25px;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .analysis-form {
-                padding: 30px;
-                margin-bottom: 30px;
-            }
-        }
-        
-        .form-control {
-            font-size: 16px; /* Prevents zoom on iOS */
-            padding: 12px 16px;
-            border-radius: 8px;
-            border: 2px solid #e9ecef;
-            transition: border-color 0.3s ease;
-        }
-        
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            padding: 12px 20px;
-            font-weight: 500;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        
-        @media (min-width: 768px) {
-            .btn-primary {
-                padding: 12px 30px;
-                font-size: 1rem;
-            }
-        }
-        
-        .analysis-results {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        
-        .analysis-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .analysis-header h3 {
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            line-height: 1.3;
-        }
-        
-        .analysis-meta .badge {
-            font-size: 0.8rem;
-            padding: 6px 10px;
-        }
-        
-        /* Header responsive for tablets and desktop */
-        @media (min-width: 768px) {
-            .analysis-header {
-                padding: 20px;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                gap: 0;
-            }
+
+        :root {
+            /* Enhanced Color Palette */
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary-color: #8b5cf6;
+            --secondary-light: #a78bfa;
+            --accent-color: #06b6d4;
+            --accent-light: #22d3ee;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
             
-            .analysis-header h3 {
-                font-size: 1.3rem;
-            }
+            /* Enhanced Background Colors */
+            --dark-bg: #0f172a;
+            --darker-bg: #020617;
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
             
-            .analysis-meta .badge {
-                font-size: 0.9rem;
-                padding: 8px 12px;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .analysis-header {
-                padding: 24px;
-            }
+            /* Enhanced Typography */
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
             
-            .analysis-header h3 {
-                font-size: 1.5rem;
-            }
-        }
-        
-        .articles-section, .insights-section {
-            padding: 20px;
-        }
-        
-        .articles-section h4, .insights-section h4 {
-            color: #495057;
-            margin-bottom: 16px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        @media (min-width: 768px) {
-            .articles-section, .insights-section {
-                padding: 25px;
-            }
+            /* Enhanced Spacing */
+            --border-radius: 16px;
+            --border-radius-lg: 24px;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 35px 60px -12px rgba(0, 0, 0, 0.6);
             
-            .articles-section h4, .insights-section h4 {
-                font-size: 1.2rem;
-                margin-bottom: 20px;
-            }
+            /* Animation Variables */
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.6s ease;
         }
-        
-        @media (min-width: 1200px) {
-            .articles-section, .insights-section {
-                padding: 30px;
-            }
-            
-            .articles-section h4, .insights-section h4 {
-                font-size: 1.25rem;
-                margin-bottom: 24px;
-            }
-        }
-        
-        .articles-grid {
-            display: grid;
-            gap: 16px;
-        }
-        
-        @media (min-width: 768px) {
-            .articles-grid {
-                gap: 20px;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .articles-grid {
-                gap: 24px;
-            }
-        }
-        
-        .news-article {
-            border: 1px solid #e9ecef;
-            border-radius: 10px;
-            padding: 16px;
-            background: #f8f9fa;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .news-article:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-            border-color: #667eea;
-        }
-        
-        @media (min-width: 768px) {
-            .news-article {
-                padding: 20px;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .news-article {
-                padding: 24px;
-            }
-        }
-        
-        .article-title {
-            color: #2c3e50;
-            font-size: 1rem;
-            margin-bottom: 10px;
-            line-height: 1.4;
-            font-weight: 600;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        @media (min-width: 576px) {
-            .article-title {
-                font-size: 1.1rem;
-            }
-        }
-        
-        @media (min-width: 768px) {
-            .article-title {
-                font-size: 1.2rem;
-                margin-bottom: 12px;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .article-title {
-                font-size: 1.25rem;
-                margin-bottom: 15px;
-            }
-        }
-        
-        .article-summary {
-            color: #6c757d;
-            margin-bottom: 12px;
-            line-height: 1.5;
-            font-size: 0.9rem;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        
-        @media (min-width: 576px) {
-            .article-summary {
-                font-size: 0.95rem;
-                line-height: 1.6;
-            }
-        }
-        
-        @media (min-width: 768px) {
-            .article-summary {
-                font-size: 1rem;
-                margin-bottom: 15px;
-            }
-        }
-        
-        .article-footer {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        @media (min-width: 768px) {
-            .article-footer {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
-            }
-        }
-        
-        .article-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        
-        @media (min-width: 576px) {
-            .article-meta {
-                flex-direction: row;
-                gap: 15px;
-                flex-wrap: wrap;
-            }
-        }
-        
-        .article-meta span {
-            color: #6c757d;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        @media (min-width: 768px) {
-            .article-meta span {
-                font-size: 0.9rem;
-            }
-        }
-        
-        .read-more-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.85rem;
-            padding: 8px 16px;
-            border: 2px solid #667eea;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            align-self: flex-start;
-            min-height: 44px; /* Better touch target */
-        }
-        
-        .read-more-link:hover {
-            background-color: #667eea;
-            color: white;
-            transform: translateY(-1px);
-        }
-        
-        @media (min-width: 768px) {
-            .read-more-link {
-                font-size: 0.9rem;
-                padding: 10px 20px;
-            }
-        }
-        
-        .insight-content {
-            background: #f8f9fa;
-            padding: 16px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-        }
-        
-        @media (min-width: 768px) {
-            .insight-content {
-                padding: 20px;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .insight-content {
-                padding: 24px;
-            }
-        }
-        
-        .analysis-text {
-            color: #495057;
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
             line-height: 1.6;
-            font-size: 0.9rem;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            hyphens: auto;
-            -webkit-hyphens: auto;
-            -moz-hyphens: auto;
-            -ms-hyphens: auto;
+            overflow-x: hidden;
         }
-        
-        @media (min-width: 576px) {
-            .analysis-text {
-                font-size: 0.95rem;
-                line-height: 1.7;
-            }
-        }
-        
-        @media (min-width: 768px) {
-            .analysis-text {
-                font-size: 1rem;
-                line-height: 1.8;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .analysis-text {
-                font-size: 1.05rem;
-            }
-        }
-        
-        .analysis-footer {
-            background: #f8f9fa;
-            padding: 12px 20px;
-            border-top: 1px solid #e9ecef;
-        }
-        
-        @media (min-width: 768px) {
-            .analysis-footer {
-                padding: 15px 25px;
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .analysis-footer {
-                padding: 18px 30px;
-            }
-        }
-        
-        .footer-content {
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, #1e293b 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6c757d;
-            font-size: 0.8rem;
-            text-align: center;
-            flex-wrap: wrap;
-            gap: 4px;
+            z-index: 10000;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
-        
-        @media (min-width: 768px) {
-            .footer-content {
-                font-size: 0.9rem;
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-content {
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .loading-logo {
+            margin-bottom: 2rem;
+        }
+
+        .logo-brain {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: logoRotate 3s linear infinite;
+        }
+
+        .brain-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: particleFloat 2s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { top: 20%; left: 30%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 30%; right: 20%; animation-delay: 0.4s; }
+        .particle:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 0.8s; }
+        .particle:nth-child(4) { bottom: 20%; right: 30%; animation-delay: 1.2s; }
+        .particle:nth-child(5) { top: 50%; left: 50%; animation-delay: 1.6s; }
+
+        @keyframes logoRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { opacity: 0.4; transform: translateY(0px); }
+            50% { opacity: 1; transform: translateY(-10px); }
+        }
+
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+            animation: loadingProgress 2s ease-in-out infinite;
+        }
+
+        @keyframes loadingProgress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            animation: loadingText 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingText {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Particle System */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Enhanced Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--darker-bg);
+            overflow: hidden;
+        }
+
+        .mesh-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.3) 0%, transparent 50%),
+                       radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+                       radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.2) 0%, transparent 50%);
+            animation: meshMove 20s ease-in-out infinite;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(120deg) scale(1.1); }
+            66% { transform: rotate(240deg) scale(0.9); }
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+
+        .shape-3 {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        .shape-4 {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, var(--success-color), var(--accent-color));
+            top: 30%;
+            right: 30%;
+            animation-delay: -15s;
+        }
+
+        .shape-5 {
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(45deg, var(--warning-color), var(--error-color));
+            bottom: 10%;
+            right: 20%;
+            animation-delay: -7s;
+        }
+
+        .shape-6 {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(45deg, var(--accent-color), var(--success-color));
+            top: 70%;
+            left: 30%;
+            animation-delay: -12s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            33% { transform: translateY(-30px) rotate(120deg); opacity: 0.4; }
+            66% { transform: translateY(20px) rotate(240deg); opacity: 0.8; }
+        }
+
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 30s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Enhanced Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 0;
+            transition: all var(--transition-normal);
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(15, 23, 42, 0.98);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-icon {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 12px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .icon-glow {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 14px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .brand-icon:hover .icon-glow {
+            opacity: 0.6;
+            animation: iconGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes iconGlow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            color: var(--text-primary);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--warning-color);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: var(--success-color);
+        }
+
+        .status-dot.error {
+            background: var(--error-color);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Enhanced Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 0 4rem;
+            position: relative;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--accent-color);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+
+        .title-line {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .typewriter {
+            position: relative;
+            border-right: 4px solid var(--primary-color);
+            animation: typewriterBlink 1s infinite;
+        }
+
+        .cursor-glow {
+            position: absolute;
+            right: -8px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary-color);
+            box-shadow: 0 0 20px var(--primary-color);
+            animation: cursorGlow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes typewriterBlink {
+            0%, 50% { border-color: var(--primary-color); }
+            51%, 100% { border-color: transparent; }
+        }
+
+        @keyframes cursorGlow {
+            0% { opacity: 0.8; box-shadow: 0 0 20px var(--primary-color); }
+            100% { opacity: 1; box-shadow: 0 0 30px var(--primary-color); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.375rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .cta-primary, .cta-secondary {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .cta-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .btn-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
             }
         }
-        
-        .loading-spinner {
-            text-align: center;
-            padding: 30px;
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
         }
-        
-        @media (min-width: 768px) {
-            .loading-spinner {
-                padding: 40px;
+
+        .stat-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-normal);
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 12px;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Enhanced AI Brain Visual */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .ai-brain-container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+        }
+
+        .ai-brain {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+        }
+
+        .brain-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            animation: brainPulse 4s ease-in-out infinite;
+            box-shadow: 
+                0 0 60px rgba(99, 102, 241, 0.4),
+                inset 0 0 60px rgba(255, 255, 255, 0.1);
+        }
+
+        .brain-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glowPulse 6s ease-in-out infinite;
+        }
+
+        .brain-rings {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .brain-ring {
+            position: absolute;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .ring-1 {
+            width: 220px;
+            height: 220px;
+            top: -110px;
+            left: -110px;
+            animation: ringRotate 10s linear infinite;
+        }
+
+        .ring-2 {
+            width: 260px;
+            height: 260px;
+            top: -130px;
+            left: -130px;
+            animation: ringRotate 15s linear infinite reverse;
+        }
+
+        .ring-3 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            left: -150px;
+            animation: ringRotate 20s linear infinite;
+        }
+
+        @keyframes brainPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes ringRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .neural-network {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .neuron {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            animation: pulse-neuron 3s ease-in-out infinite;
+        }
+
+        .neuron-1 { top: 20%; left: 30%; animation-delay: 0s; }
+        .neuron-2 { top: 30%; right: 20%; animation-delay: 0.5s; }
+        .neuron-3 { bottom: 30%; left: 20%; animation-delay: 1s; }
+        .neuron-4 { bottom: 20%; right: 30%; animation-delay: 1.5s; }
+        .neuron-5 { top: 70%; left: 50%; animation-delay: 2s; }
+        .neuron-6 { top: 50%; right: 50%; animation-delay: 2.5s; }
+
+        @keyframes pulse-neuron {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        .connection {
+            position: absolute;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+            animation: data-flow 2s linear infinite;
+        }
+
+        .connection-1 {
+            top: 30%;
+            left: 40%;
+            width: 80px;
+            height: 2px;
+            transform: rotate(45deg);
+        }
+
+        .connection-2 {
+            top: 50%;
+            right: 30%;
+            width: 60px;
+            height: 2px;
+            transform: rotate(-30deg);
+        }
+
+        .connection-3 {
+            bottom: 40%;
+            left: 30%;
+            width: 70px;
+            height: 2px;
+            transform: rotate(60deg);
+        }
+
+        .connection-4 {
+            top: 60%;
+            right: 40%;
+            width: 50px;
+            height: 2px;
+            transform: rotate(-60deg);
+        }
+
+        @keyframes data-flow {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        .data-streams {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .data-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: dataStream 4s ease-in-out infinite;
+        }
+
+        .data-point:nth-child(1) {
+            top: 25%;
+            left: 25%;
+            animation-delay: 0s;
+        }
+
+        .data-point:nth-child(2) {
+            top: 45%;
+            right: 25%;
+            animation-delay: 1.3s;
+        }
+
+        .data-point:nth-child(3) {
+            bottom: 35%;
+            left: 35%;
+            animation-delay: 2.6s;
+        }
+
+        @keyframes dataStream {
+            0%, 100% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Floating Info Cards */
+        .floating-cards {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .info-card {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            color: var(--text-primary);
+            font-weight: 500;
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        .card-1 {
+            top: 10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .card-2 {
+            top: 50%;
+            right: -15%;
+            animation-delay: 2s;
+        }
+
+        .card-3 {
+            bottom: 15%;
+            left: -5%;
+            animation-delay: 4s;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            animation: scrollBounce 2s ease-in-out infinite;
+        }
+
+        .scroll-arrow {
+            width: 20px;
+            height: 20px;
+            border-right: 2px solid var(--text-secondary);
+            border-bottom: 2px solid var(--text-secondary);
+            transform: rotate(45deg);
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Enhanced Analysis Section */
+        .analysis-section {
+            padding: 6rem 0;
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--accent-color);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Enhanced Input Section */
+        .analysis-input {
+            margin-bottom: 4rem;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .input-field {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 1.5rem 1.25rem 1.5rem 3.5rem;
+            background: var(--card-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            color: var(--text-primary);
+            font-size: 1.125rem;
+            backdrop-filter: blur(20px);
+            transition: all var(--transition-normal);
+            font-family: inherit;
+        }
+
+        .input-field input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            transition: color var(--transition-normal);
+        }
+
+        .input-field input:focus + .input-icon {
+            color: var(--primary-color);
+        }
+
+        .input-focus-line {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all var(--transition-normal);
+            transform: translateX(-50%);
+        }
+
+        .input-field input:focus ~ .input-focus-line {
+            width: 100%;
+        }
+
+        .input-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .suggestion-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .analyze-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: var(--border-radius-lg);
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            min-width: 180px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .analyze-btn:hover:not(.loading) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all var(--transition-normal);
+        }
+
+        .analyze-btn.loading .btn-content {
+            opacity: 0;
+        }
+
+        .btn-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .analyze-btn.loading .btn-loader {
+            opacity: 1;
+        }
+
+        .loader-ring {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-success {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: all var(--transition-normal);
+        }
+
+        .analyze-btn.success .btn-content,
+        .analyze-btn.success .btn-loader {
+            opacity: 0;
+        }
+
+        .analyze-btn.success .btn-success {
+            opacity: 1;
+        }
+
+        /* Enhanced Quick Industries */
+        .quick-industries {
+            text-align: center;
+        }
+
+        .quick-label {
+            display: block;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quick-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(10px);
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .quick-btn:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .btn-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 12px;
+            font-size: 1.25rem;
+            color: white;
+            transition: all var(--transition-normal);
+        }
+
+        .quick-btn:hover .btn-icon-wrapper {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Enhanced Results Container */
+        .results-container {
+            min-height: 300px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .results-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+        }
+
+        .results-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100%;
+            min-height: 240px;
+        }
+
+        .placeholder-icon {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .placeholder-icon i {
+            font-size: 3rem;
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .icon-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+        }
+
+        .placeholder-features {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .feature-item i {
+            color: var(--accent-color);
+        }
+
+        /* Enhanced Features Section */
+        .features-section {
+            padding: 6rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            position: relative;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            transition: all var(--transition-slow);
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-card.featured {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid var(--primary-color);
+            position: relative;
+        }
+
+        .feature-ribbon {
+            position: absolute;
+            top: 1rem;
+            right: -2rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 3rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transform: rotate(45deg);
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .feature-glow {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            animation: featureGlow 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes featureGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            border-radius: 16px;
+        }
+
+        .icon-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 16px;
+            transition: all var(--transition-normal);
+        }
+
+        .feature-card:hover .icon-bg {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .feature-card h3 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .feature-list li i {
+            color: var(--success-color);
+            font-size: 0.75rem;
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            padding: 4rem 0 2rem;
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+        }
+
+        .footer-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .brand-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .footer-stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .footer-tech {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .tech-item i {
+            color: var(--accent-color);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 10000;
+            max-width: 400px;
+        }
+
+        .toast {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            animation: toastSlideIn 0.3s ease-out;
+        }
+
+        .toast.success {
+            border-color: var(--success-color);
+        }
+
+        .toast.error {
+            border-color: var(--error-color);
+        }
+
+        .toast.warning {
+            border-color: var(--warning-color);
+        }
+
+        .toast.info {
+            border-color: var(--accent-color);
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
         }
-        
-        .error-message {
-            margin-top: 20px;
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ai-brain-container {
+                width: 400px;
+                height: 400px;
+            }
         }
-        
-        /* Better scrollbar for all devices */
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .input-container {
+                flex-direction: column;
+            }
+            
+            .quick-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-main,
+            .footer-bottom {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .footer-stats {
+                gap: 2rem;
+            }
+            
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-brain-container {
+                width: 300px;
+                height: 300px;
+            }
+        }
+
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: var(--darker-bg);
         }
-        
+
         ::-webkit-scrollbar-thumb {
-            background: #888;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border-radius: 4px;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-light));
         }
-        
-        /* Enhanced accessibility */
-        .btn:focus,
-        .form-control:focus,
-        .read-more-link:focus {
-            outline: 2px solid #667eea;
-            outline-offset: 2px;
+
+        /* Selection Styles */
+        ::selection {
+            background: rgba(99, 102, 241, 0.3);
+            color: var(--text-primary);
         }
-        
-        /* Print styles */
-        @media print {
-            .header,
-            .analysis-form,
-            .loading-spinner {
-                display: none;
+
+        ::-moz-selection {
+            background: rgba(99, 102, 241, 0.3);
+            color: var(--text-primary);
+        }
+
+        /* Results Specific Styles */
+        .analysis-results.enhanced {
+            animation: resultsSlideIn 0.8s ease-out;
+        }
+
+        @keyframes resultsSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header.enhanced {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .header-icon {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 16px;
+            font-size: 1.75rem;
+            color: white;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header-content h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 0.5rem;
+        }
+
+        .result-meta {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .result-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .analysis-content.enhanced {
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .article-card {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border-left: 4px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .article-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .article-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+        }
+
+        .article-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .article-summary {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 12px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.875rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-item i {
+            color: var(--accent-color);
+            width: 16px;
+            text-align: center;
+        }
+
+        .article-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .article-link:hover {
+            color: var(--accent-light);
+            text-decoration: underline;
+        }
+
+        .analysis-section {
+            margin: 2.5rem 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            border-radius: 16px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header i {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .section-header h4 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .section-content {
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            min-height: 300px;
+        }
+
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--error-color), #dc2626);
+            border-radius: 50%;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .error-container h3 {
+            font-size: 1.5rem;
+            color: var(--error-color);
+            margin-bottom: 1rem;
+        }
+
+        .retry-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .retry-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Nav Menu Toggle (Mobile) */
+        .nav-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 3px;
+            padding: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-menu-toggle span {
+            width: 20px;
+            height: 2px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu-toggle {
+                display: flex;
             }
             
-            .analysis-results {
-                box-shadow: none;
-                border: 1px solid #ddd;
-            }
-            
-            .read-more-link {
-                color: #000 !important;
-                text-decoration: underline;
-            }
-        }
-        
-        /* High DPI displays */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .news-article {
-                border-width: 0.5px;
+            .nav-controls {
+                gap: 0.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1><i class="fas fa-robot me-2"></i>RAG News Intelligence Platform</h1>
-            <p>Powered by AI • Created by Harjinder Singh</p>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="logo-brain">
+                    <div class="brain-particles">
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                    </div>
+                </div>
+            </div>
+            <h2>RAG News Agent</h2>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p class="loading-text">Initializing AI Systems...</p>
         </div>
+    </div>
 
-        <!-- Analysis Form -->
-        <div class="analysis-form">
-            <form id="analysisForm">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="mb-3">
-                            <label for="industry" class="form-label">
-                                <i class="fas fa-industry me-2"></i>Industry to Analyze
-                            </label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="industry" 
-                                placeholder="e.g., Electric Vehicles, Artificial Intelligence, Renewable Energy"
-                                required
-                                autocomplete="off"
-                            >
+    <!-- Particle System -->
+    <div class="particles-container" id="particles-container"></div>
+
+    <!-- Enhanced Background -->
+    <div class="animated-bg">
+        <div class="mesh-gradient"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+            <div class="shape shape-6"></div>
+        </div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Enhanced Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-brain"></i>
+                    <div class="icon-glow"></div>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">RAG News Agent</span>
+                    <span class="brand-tagline">AI-Powered Analysis</span>
+                </div>
+            </div>
+            
+            <div class="nav-controls">
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="nav-status" id="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>Connecting...</span>
+                </div>
+                <button class="nav-menu-toggle" id="nav-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Enhanced Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-sparkles"></i>
+                    <span>Powered by Groq Llama 3.1 70B</span>
+                </div>
+                
+                <h1 class="hero-title">
+                    <span class="title-line">
+                        <span class="gradient-text">AI-Powered</span>
+                        <div class="title-decoration"></div>
+                    </span>
+                    <span class="title-line">
+                        <span class="typewriter" id="typewriter-text">Industry Analysis</span>
+                        <div class="cursor-glow"></div>
+                    </span>
+                </h1>
+                
+                <p class="hero-subtitle">
+                    Get comprehensive real-time news analysis, market insights, and trend predictions 
+                    powered by advanced RAG technology and cutting-edge AI models
+                </p>
+                
+                <div class="hero-cta">
+                    <button class="cta-primary" onclick="document.getElementById('analysis-section').scrollIntoView({behavior: 'smooth'})">
+                        <span>Start Analysis</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <div class="btn-ripple"></div>
+                    </button>
+                    <button class="cta-secondary" onclick="document.getElementById('features-section').scrollIntoView({behavior: 'smooth'})">
+                        <i class="fas fa-play"></i>
+                        <span>Learn More</span>
+                    </button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+                        <div class="stat-icon"><i class="fas fa-newspaper"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-target="10000">0</div>
+                            <div class="stat-label">Articles Analyzed</div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label class="form-label d-none d-md-block">&nbsp;</label>
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-search me-2"></i>Analyze Industry
-                            </button>
+                    <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stat-icon"><i class="fas fa-industry"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-target="25">0</div>
+                            <div class="stat-label">Industries Supported</div>
+                        </div>
+                    </div>
+                    <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-target="99">0</div>
+                            <div class="stat-label">Accuracy Rate %</div>
+                        </div>
+                    </div>
+                    <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="stat-content">
+                            <div class="stat-number" data-target="5">0</div>
+                            <div class="stat-label">Sec Response Time</div>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
-
-        <!-- Loading Spinner -->
-        <div id="loading" class="loading-spinner" style="display: none;">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
             </div>
-            <p class="mt-3">Analyzing industry trends and news...</p>
+            
+            <div class="hero-visual" data-aos="fade-left">
+                <div class="ai-brain-container">
+                    <div class="ai-brain">
+                        <div class="brain-core"></div>
+                        <div class="brain-rings">
+                            <div class="brain-ring ring-1"></div>
+                            <div class="brain-ring ring-2"></div>
+                            <div class="brain-ring ring-3"></div>
+                        </div>
+                        <div class="neural-network">
+                            <div class="neuron neuron-1"></div>
+                            <div class="neuron neuron-2"></div>
+                            <div class="neuron neuron-3"></div>
+                            <div class="neuron neuron-4"></div>
+                            <div class="neuron neuron-5"></div>
+                            <div class="neuron neuron-6"></div>
+                            <div class="connection connection-1"></div>
+                            <div class="connection connection-2"></div>
+                            <div class="connection connection-3"></div>
+                            <div class="connection connection-4"></div>
+                        </div>
+                        <div class="data-streams">
+                            <div class="data-point"></div>
+                            <div class="data-point"></div>
+                            <div class="data-point"></div>
+                        </div>
+                    </div>
+                    <div class="brain-glow"></div>
+                </div>
+                
+                <div class="floating-cards">
+                    <div class="info-card card-1">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Analysis</span>
+                    </div>
+                    <div class="info-card card-2">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Real-time News</span>
+                    </div>
+                    <div class="info-card card-3">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Market Insights</span>
+                    </div>
+                </div>
+            </div>
         </div>
+        
+        <div class="hero-scroll-indicator">
+            <div class="scroll-arrow"></div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
 
-        <!-- Analysis Results Container -->
-        <div id="analysis"></div>
-    </div>
+    <!-- Enhanced Analysis Section -->
+    <section class="analysis-section" id="analysis-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-badge">
+                    <i class="fas fa-chart-line"></i>
+                    <span>AI Analysis Dashboard</span>
+                </div>
+                <h2>Industry Intelligence Hub</h2>
+                <p>Enter any industry to get comprehensive market analysis with real-time data and AI-powered insights</p>
+            </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        document.getElementById('analysisForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const industry = document.getElementById('industry').value.trim();
-            if (!industry) {
-                alert('Please enter an industry to analyze');
-                return;
-            }
-            
-            // Show loading spinner
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('analysis').innerHTML = '';
-            
-            // Make API request with better error handling
-            fetch('/analyze', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json, text/plain, */*'
-                },
-                body: JSON.stringify({ industry: industry })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                return response.text();
-            })
-            .then(rawData => {
-                document.getElementById('loading').style.display = 'none';
+            <!-- Enhanced Input Form -->
+            <div class="analysis-input" data-aos="fade-up" data-aos-delay="200">
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <div class="input-field">
+                            <i class="fas fa-industry input-icon"></i>
+                            <input 
+                                type="text" 
+                                id="industry-input" 
+                                placeholder="Enter industry name (e.g., Technology, Healthcare, Fashion)"
+                                autocomplete="off"
+                                spellcheck="false"
+                            >
+                            <div class="input-focus-line"></div>
+                        </div>
+                        <div class="input-suggestions" id="suggestions"></div>
+                    </div>
+                    <button class="analyze-btn" id="analyze-btn">
+                        <span class="btn-content">
+                            <span class="btn-text">Analyze</span>
+                            <i class="fas fa-search btn-icon"></i>
+                        </span>
+                        <div class="btn-loader">
+                            <div class="loader-ring"></div>
+                        </div>
+                        <div class="btn-success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="btn-ripple-effect"></div>
+                    </button>
+                </div>
                 
-                try {
-                    const jsonData = JSON.parse(rawData);
-                    displayAnalysis(jsonData);
-                } catch (e) {
-                    displayAnalysis(rawData);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('analysis').innerHTML = `
-                    <div class="error-message">
-                        <div class="alert alert-danger" role="alert">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            <strong>Connection Error:</strong> ${error.message}
+                <!-- Enhanced Quick Industries -->
+                <div class="quick-industries">
+                    <span class="quick-label">Quick Select Industries:</span>
+                    <div class="quick-grid">
+                        <button class="quick-btn" data-industry="Technology">
+                            <div class="btn-icon-wrapper">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                            <span>Technology</span>
+                        </button>
+                        <button class="quick-btn" data-industry="Healthcare">
+                            <div class="btn-icon-wrapper">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <span>Healthcare</span>
+                        </button>
+                        <button class="quick-btn" data-industry="Finance">
+                            <div class="btn-icon-wrapper">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span>Finance</span>
+                        </button>
+                        <button class="quick-btn" data-industry="Automotive">
+                            <div class="btn-icon-wrapper">
+                                <i class="fas fa-car"></i>
+                            </div>
+                            <span>Automotive</span>
+                        </button>
+                        <button class="quick-btn" data-industry="Fashion">
+                            <div class="btn-icon-wrapper">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <span>Fashion</span>
+                        </button>
+                        <button class="quick-btn" data-industry="Energy">
+                            <div class="btn-icon-wrapper">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <span>Energy</span>
+                        </button>
+                        <button class="quick-btn" data-industry="Real Estate">
+                            <div class="btn-icon-wrapper">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <span>Real Estate</span>
+                        </button>
+                        <button class="quick-btn" data-industry="Entertainment">
+                            <div class="btn-icon-wrapper">
+                                <i class="fas fa-film"></i>
+                            </div>
+                            <span>Entertainment</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Results Container -->
+            <div class="results-container" id="results-container" data-aos="fade-up" data-aos-delay="400">
+                <div class="results-placeholder">
+                    <div class="placeholder-icon">
+                        <i class="fas fa-chart-bar"></i>
+                        <div class="icon-pulse"></div>
+                    </div>
+                    <h3>Ready for Analysis</h3>
+                    <p>Enter an industry name above to start comprehensive AI-powered analysis</p>
+                    <div class="placeholder-features">
+                        <div class="feature-item">
+                            <i class="fas fa-newspaper"></i>
+                            <span>Real-time News</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-brain"></i>
+                            <span>AI Insights</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Market Trends</span>
                         </div>
                     </div>
-                `;
-            });
-        });
+                </div>
+            </div>
+        </div>
+    </section>
 
-        function displayAnalysis(data) {
-            const analysisContainer = document.getElementById('analysis');
-            analysisContainer.innerHTML = '';
+    <!-- Enhanced Features Section -->
+    <section class="features-section" id="features-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-badge">
+                    <i class="fas fa-magic"></i>
+                    <span>Advanced AI Technology</span>
+                </div>
+                <h2>Powered by Cutting-Edge AI</h2>
+                <p>Experience the future of industry analysis with our advanced AI-powered platform</p>
+            </div>
             
-            let analysisText = '';
-            let industry = document.getElementById('industry').value || 'Industry';
-            
-            if (typeof data === 'string') {
-                analysisText = data;
-            } else if (data && data.analysis) {
-                analysisText = data.analysis;
-                industry = data.industry || industry;
-            } else {
-                analysisContainer.innerHTML = `
-                    <div class="error-message">
-                        <div class="alert alert-danger" role="alert">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            <strong>Analysis Failed:</strong> Invalid response format
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h3>RAG Technology</h3>
+                    </div>
+                    <p>Advanced Retrieval-Augmented Generation for contextual and accurate analysis</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>Contextual Understanding</li>
+                        <li><i class="fas fa-check"></i>Real-time Data Retrieval</li>
+                        <li><i class="fas fa-check"></i>Accurate Insights</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card featured" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-ribbon">
+                        <span>Most Popular</span>
+                    </div>
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h3>Lightning Fast</h3>
+                    </div>
+                    <p>Powered by Groq's ultra-fast Llama 3.1 70B model for instant analysis</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>Sub-second Response</li>
+                        <li><i class="fas fa-check"></i>Real-time Processing</li>
+                        <li><i class="fas fa-check"></i>Scalable Performance</li>
+                    </ul>
+                    <div class="feature-glow"></div>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-newspaper"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h3>Real-time Data</h3>
+                    </div>
+                    <p>Live news fetching from multiple trusted sources across the globe</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>Multiple News Sources</li>
+                        <li><i class="fas fa-check"></i>Live Data Updates</li>
+                        <li><i class="fas fa-check"></i>Global Coverage</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-bar"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h3>Smart Analysis</h3>
+                    </div>
+                    <p>AI-powered insights, sentiment analysis, and trend predictions</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>Sentiment Analysis</li>
+                        <li><i class="fas fa-check"></i>Trend Prediction</li>
+                        <li><i class="fas fa-check"></i>Market Insights</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h3>Free & Secure</h3>
+                    </div>
+                    <p>Completely free to use with enterprise-grade security and privacy</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>No Registration Required</li>
+                        <li><i class="fas fa-check"></i>Data Privacy</li>
+                        <li><i class="fas fa-check"></i>Secure Processing</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                            <div class="icon-bg"></div>
+                        </div>
+                        <h3>Responsive Design</h3>
+                    </div>
+                    <p>Works perfectly on all devices with beautiful, modern interface</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i>Mobile Optimized</li>
+                        <li><i class="fas fa-check"></i>Cross-platform</li>
+                        <li><i class="fas fa-check"></i>Modern UI/UX</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-brand">
+                        <div class="brand-icon">
+                            <i class="fas fa-brain"></i>
+                            <div class="icon-glow"></div>
+                        </div>
+                        <div class="brand-info">
+                            <span class="brand-name">RAG News Agent</span>
+                            <span class="brand-description">AI-powered industry analysis platform</span>
                         </div>
                     </div>
-                `;
-                return;
-            }
-            
-            // Enhanced parsing with better regex and error handling
-            const articles = [];
-            
-            // Split by article markers with more flexible matching
-            const articleSections = analysisText.split(/\*\*📌\s*Article\s*\d+\s*:\s*/i);
-            
-            for (let i = 1; i < articleSections.length; i++) {
-                const articleText = articleSections[i];
-                const lines = articleText.split('\n').map(line => line.trim()).filter(line => line);
-                
-                if (lines.length === 0) continue;
-                
-                const title = lines[0].replace(/\*\*/g, '').trim();
-                
-                let summary = '';
-                let published = '';
-                let source = '';
-                let url = '';
-                
-                lines.forEach(line => {
-                    const cleanLine = line.trim();
                     
-                    // More flexible matching for different formats
-                    if (/📝.*summary.*:/i.test(cleanLine)) {
-                        summary = cleanLine.replace(/📝.*summary.*:\s*/i, '').replace(/\*\*/g, '').trim();
-                    } else if (/📅.*published.*:/i.test(cleanLine)) {
-                        published = cleanLine.replace(/📅.*published.*:\s*/i, '').replace(/\*\*/g, '').trim();
-                    } else if (/📰.*source.*:/i.test(cleanLine)) {
-                        source = cleanLine.replace(/📰.*source.*:\s*/i, '').replace(/\*\*/g, '').trim();
-                    } else if (/🔗.*read\s*more.*:/i.test(cleanLine)) {
-                        url = cleanLine.replace(/🔗.*read\s*more.*:\s*/i, '').replace(/\*\*/g, '').trim();
-                        
-                        // Validate URL
-                        if (url && !url.startsWith('http')) {
-                            url = 'https://' + url.replace(/^\/\//, '');
-                        }
+                    <div class="footer-stats">
+                        <div class="footer-stat">
+                            <span class="stat-value">24/7</span>
+                            <span class="stat-label">Available</span>
+                        </div>
+                        <div class="footer-stat">
+                            <span class="stat-value">Free</span>
+                            <span class="stat-label">To Use</span>
+                        </div>
+                        <div class="footer-stat">
+                            <span class="stat-value">AI</span>
+                            <span class="stat-label">Powered</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <div class="footer-text">
+                        Built with ❤️ using Flask, Groq Llama 3.1, and advanced RAG technology
+                    </div>
+                    <div class="footer-tech">
+                        <span class="tech-item">
+                            <i class="fas fa-code"></i>
+                            Flask
+                        </span>
+                        <span class="tech-item">
+                            <i class="fas fa-robot"></i>
+                            Groq AI
+                        </span>
+                        <span class="tech-item">
+                            <i class="fas fa-brain"></i>
+                            RAG
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Enhanced JavaScript - All embedded -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        class EnhancedRAGNewsAgent {
+            constructor() {
+                // Updated API endpoints to match your app.py backend
+                this.apiUrl = '';  // Will use same domain - your Flask app serves this
+                this.particleSystem = null;
+                this.isLoading = false;
+                this.init();
+            }
+
+            async init() {
+                await this.initializeApp();
+                this.setupEventListeners();
+                this.initAnimations();
+                this.initParticleSystem();
+                await this.checkStatus();
+                this.startStatusPolling();
+                this.initAOS();
+                this.hideLoadingScreen();
+            }
+
+            async initializeApp() {
+                // Simulate app initialization
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 2000);
+                });
+            }
+
+            hideLoadingScreen() {
+                const loadingScreen = document.getElementById('loading-screen');
+                loadingScreen.classList.add('hidden');
+                
+                // Remove loading screen from DOM after animation
+                setTimeout(() => {
+                    if (loadingScreen.parentNode) {
+                        loadingScreen.parentNode.removeChild(loadingScreen);
+                    }
+                }, 600);
+            }
+
+            setupEventListeners() {
+                // Analyze button
+                const analyzeBtn = document.getElementById('analyze-btn');
+                const industryInput = document.getElementById('industry-input');
+                
+                analyzeBtn.addEventListener('click', () => this.analyzeIndustry());
+                
+                // Enter key support
+                industryInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.analyzeIndustry();
                     }
                 });
+
+                // Quick industry buttons
+                document.querySelectorAll('.quick-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const industry = e.currentTarget.dataset.industry;
+                        industryInput.value = industry;
+                        this.analyzeIndustry();
+                    });
+                });
+
+                // Input suggestions
+                industryInput.addEventListener('input', (e) => {
+                    this.showSuggestions(e.target.value);
+                });
+
+                // Click outside to hide suggestions
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.input-wrapper')) {
+                        this.hideSuggestions();
+                    }
+                });
+
+                // Navbar scroll effect
+                window.addEventListener('scroll', () => {
+                    const navbar = document.getElementById('navbar');
+                    if (window.scrollY > 100) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                });
+
+                // Back to top button
+                const backToTopBtn = document.getElementById('back-to-top');
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 500) {
+                        backToTopBtn.classList.add('visible');
+                    } else {
+                        backToTopBtn.classList.remove('visible');
+                    }
+                });
+
+                backToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+
+                // Theme toggle (placeholder)
+                const themeToggle = document.getElementById('theme-toggle');
+                themeToggle.addEventListener('click', () => {
+                    this.showToast('Theme switching coming soon!', 'info');
+                });
+
+                // Button ripple effects
+                this.initRippleEffects();
+            }
+
+            initRippleEffects() {
+                document.querySelectorAll('.cta-primary').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.createRipple(e, btn);
+                    });
+                });
+            }
+
+            createRipple(event, button) {
+                const ripple = document.createElement('div');
+                const rect = button.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = event.clientX - rect.left - size / 2;
+                const y = event.clientY - rect.top - size / 2;
                 
-                // Only add article if it has meaningful content
-                if (title && title.length > 5) {
-                    articles.push({
-                        title: title,
-                        summary: summary || 'No summary available',
-                        published: published || 'Date not specified',
-                        source: source || 'Source not specified',
-                        url: url
+                ripple.classList.add('btn-ripple');
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                
+                button.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            }
+
+            initAnimations() {
+                // Enhanced typewriter effect
+                this.typewriterEffect();
+                
+                // Counter animations with intersection observer
+                this.animateCounters();
+                
+                // Scroll reveal animations
+                this.setupScrollReveal();
+            }
+
+            typewriterEffect() {
+                const words = [
+                    'Industry Analysis',
+                    'Market Intelligence',
+                    'Trend Predictions',
+                    'News Analytics',
+                    'Business Insights',
+                    'AI-Powered Reports',
+                    'Real-time Data'
+                ];
+                
+                let wordIndex = 0;
+                let charIndex = 0;
+                let isDeleting = false;
+                const typewriterElement = document.getElementById('typewriter-text');
+                
+                const type = () => {
+                    const currentWord = words[wordIndex];
+                    
+                    if (isDeleting) {
+                        typewriterElement.textContent = currentWord.substring(0, charIndex - 1);
+                        charIndex--;
+                    } else {
+                        typewriterElement.textContent = currentWord.substring(0, charIndex + 1);
+                        charIndex++;
+                    }
+                    
+                    let typeSpeed = isDeleting ? 50 : 100;
+                    
+                    if (!isDeleting && charIndex === currentWord.length) {
+                        typeSpeed = 2000;
+                        isDeleting = true;
+                    } else if (isDeleting && charIndex === 0) {
+                        isDeleting = false;
+                        wordIndex = (wordIndex + 1) % words.length;
+                        typeSpeed = 500;
+                    }
+                    
+                    setTimeout(type, typeSpeed);
+                };
+                
+                setTimeout(type, 1000);
+            }
+
+            animateCounters() {
+                const counters = document.querySelectorAll('.stat-number');
+                
+                const observerOptions = {
+                    threshold: 0.5,
+                    rootMargin: '0px 0px -100px 0px'
+                };
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            this.animateCounter(entry.target);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+                
+                counters.forEach(counter => observer.observe(counter));
+            }
+
+            animateCounter(counter) {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const increment = target / 100;
+                let current = 0;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        counter.textContent = Math.ceil(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString();
+                    }
+                };
+                
+                updateCounter();
+            }
+
+            setupScrollReveal() {
+                const revealElements = document.querySelectorAll('[data-aos]');
+                
+                if (typeof AOS !== 'undefined') {
+                    // AOS is loaded, use it
+                    return;
+                }
+                
+                // Fallback scroll reveal
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('revealed');
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                });
+                
+                revealElements.forEach(el => {
+                    el.classList.add('scroll-reveal');
+                    observer.observe(el);
+                });
+            }
+
+            initParticleSystem() {
+                const particlesContainer = document.getElementById('particles-container');
+                const particleCount = 50;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    this.createParticle(particlesContainer);
+                }
+            }
+
+            createParticle(container) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random position
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                // Random animation duration
+                particle.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                
+                // Random opacity
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                
+                container.appendChild(particle);
+                
+                // Animate particle
+                this.animateParticle(particle);
+            }
+
+            animateParticle(particle) {
+                const moveX = (Math.random() - 0.5) * 200;
+                const moveY = (Math.random() - 0.5) * 200;
+                
+                particle.animate([
+                    { transform: 'translate(0px, 0px)' },
+                    { transform: `translate(${moveX}px, ${moveY}px)` },
+                    { transform: 'translate(0px, 0px)' }
+                ], {
+                    duration: Math.random() * 10000 + 10000,
+                    iterations: Infinity,
+                    easing: 'ease-in-out'
+                });
+            }
+
+            initAOS() {
+                if (typeof AOS !== 'undefined') {
+                    AOS.init({
+                        duration: 800,
+                        easing: 'ease-out',
+                        once: true,
+                        offset: 100
                     });
                 }
             }
-            
-            // Extract insights with better parsing
-            let insightHtml = '';
-            const insightKeywords = [
-                'sentiment', 'market outlook', 'key trends', 'analysis', 
-                'conclusion', 'insights', 'summary', 'overview'
-            ];
-            
-            const lastArticleIndex = analysisText.lastIndexOf('🔗');
-            if (lastArticleIndex !== -1) {
-                const remainingText = analysisText.substring(lastArticleIndex);
-                const lines = remainingText.split('\n').filter(line => line.trim());
-                
-                let insightStartIndex = -1;
-                for (let i = 0; i < lines.length; i++) {
-                    const line = lines[i].toLowerCase();
-                    if (insightKeywords.some(keyword => line.includes(keyword))) {
-                        insightStartIndex = i;
-                        break;
-                    }
-                }
-                
-                if (insightStartIndex !== -1) {
-                    insightHtml = lines.slice(insightStartIndex).join('\n')
-                        .replace(/\*\*/g, '')
-                        .replace(/📊|📈|🎯|📚|💡|🔧|🧠|📝|📅|📰|🔗|📌/g, '')
-                        .replace(/^\s+|\s+$/gm, '')
-                        .replace(/\n{3,}/g, '\n\n')
-                        .trim();
+
+            async checkStatus() {
+                try {
+                    // Updated to match your app.py endpoints
+                    const response = await fetch('/api/status');
+                    const data = await response.json();
+                    
+                    this.updateStatusIndicator(data.agent_ready);
+                } catch (error) {
+                    console.error('Status check failed:', error);
+                    this.updateStatusIndicator(false, true);
                 }
             }
-            
-            // Generate enhanced articles HTML
-            let articlesHtml = '';
-            articles.forEach((article, index) => {
-                articlesHtml += `
-                    <div class="news-article" data-article="${index + 1}">
-                        <h4 class="article-title">${article.title}</h4>
-                        <p class="article-summary">${article.summary}</p>
-                        <div class="article-footer">
-                            <div class="article-meta">
-                                <span><i class="fas fa-calendar me-1"></i>${article.published}</span>
-                                <span><i class="fas fa-globe me-1"></i>${article.source}</span>
+
+            updateStatusIndicator(isReady, isError = false) {
+                const statusIndicator = document.getElementById('status-indicator');
+                const statusDot = statusIndicator.querySelector('.status-dot');
+                const statusText = statusIndicator.querySelector('span');
+                
+                statusDot.className = 'status-dot';
+                
+                if (isError) {
+                    statusDot.classList.add('error');
+                    statusText.textContent = 'Connection Error';
+                } else if (isReady) {
+                    statusDot.classList.add('connected');
+                    statusText.textContent = 'Agent Ready';
+                } else {
+                    statusText.textContent = 'Initializing...';
+                }
+            }
+
+            startStatusPolling() {
+                setInterval(() => {
+                    this.checkStatus();
+                }, 15000);
+            }
+
+            showSuggestions(query) {
+                if (!query.trim()) {
+                    this.hideSuggestions();
+                    return;
+                }
+
+                const suggestions = [
+                    'Technology', 'Healthcare', 'Finance', 'Automotive', 'Fashion',
+                    'Sports', 'Entertainment', 'Energy', 'Agriculture', 'Education',
+                    'Real Estate', 'Travel', 'Food & Beverage', 'Retail', 'Manufacturing',
+                    'Telecommunications', 'Aerospace', 'Biotechnology', 'Gaming',
+                    'E-commerce', 'Cryptocurrency', 'Renewable Energy', 'Artificial Intelligence'
+                ];
+
+                const filtered = suggestions.filter(s => 
+                    s.toLowerCase().includes(query.toLowerCase())
+                ).slice(0, 6);
+
+                const suggestionsContainer = document.getElementById('suggestions');
+                
+                if (filtered.length > 0) {
+                    suggestionsContainer.innerHTML = filtered.map(suggestion => 
+                        `<div class="suggestion-item" data-suggestion="${suggestion}">${suggestion}</div>`
+                    ).join('');
+                    
+                    suggestionsContainer.style.display = 'block';
+                    
+                    // Add click listeners to suggestions
+                    suggestionsContainer.querySelectorAll('.suggestion-item').forEach(item => {
+                        item.addEventListener('click', (e) => {
+                            document.getElementById('industry-input').value = e.target.dataset.suggestion;
+                            this.hideSuggestions();
+                        });
+                    });
+                } else {
+                    this.hideSuggestions();
+                }
+            }
+
+            hideSuggestions() {
+                const suggestionsContainer = document.getElementById('suggestions');
+                suggestionsContainer.style.display = 'none';
+            }
+
+            async analyzeIndustry() {
+                if (this.isLoading) return;
+                
+                const industryInput = document.getElementById('industry-input');
+                const analyzeBtn = document.getElementById('analyze-btn');
+                const resultsContainer = document.getElementById('results-container');
+                
+                const industry = industryInput.value.trim();
+                
+                if (!industry) {
+                    this.showToast('Please enter an industry name', 'warning');
+                    industryInput.focus();
+                    return;
+                }
+
+                // Show loading state
+                this.isLoading = true;
+                analyzeBtn.classList.add('loading');
+                resultsContainer.innerHTML = this.getAdvancedLoadingHTML();
+                this.hideSuggestions();
+                
+                // Start loading animation
+                this.startLoadingSteps();
+                
+                try {
+                    // Updated to match your app.py endpoints
+                    const response = await fetch('/api/analyze', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ industry })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.displayResults(data);
+                        this.showSuccessState(analyzeBtn);
+                        this.showToast(`Analysis completed for ${industry}!`, 'success');
+                    } else {
+                        this.showError(data.error || 'Analysis failed');
+                        this.showToast(data.error || 'Analysis failed', 'error');
+                    }
+                } catch (error) {
+                    console.error('Analysis failed:', error);
+                    this.showError('Connection failed. Please check your internet connection and try again.');
+                    this.showToast('Connection failed. Please try again.', 'error');
+                } finally {
+                    this.isLoading = false;
+                    analyzeBtn.classList.remove('loading');
+                    
+                    // Reset button state after success animation
+                    setTimeout(() => {
+                        analyzeBtn.classList.remove('success');
+                    }, 2000);
+                }
+            }
+
+            showSuccessState(button) {
+                button.classList.add('success');
+                
+                // Add success haptic feedback if available
+                if (navigator.vibrate) {
+                    navigator.vibrate(100);
+                }
+            }
+
+            startLoadingSteps() {
+                const steps = document.querySelectorAll('.loading-step');
+                let currentStep = 0;
+                
+                const activateStep = () => {
+                    if (currentStep < steps.length) {
+                        steps.forEach(step => step.classList.remove('active'));
+                        steps[currentStep].classList.add('active');
+                        currentStep++;
+                        
+                        setTimeout(activateStep, 1500);
+                    }
+                };
+                
+                activateStep();
+            }
+
+            getAdvancedLoadingHTML() {
+                const industry = document.getElementById('industry-input').value;
+                
+                return `
+                    <div class="loading-container enhanced">
+                        <div class="loading-header">
+                            <div class="loading-brain">
+                                <div class="brain-core-loading"></div>
+                                <div class="loading-particles">
+                                    <div class="particle-loading"></div>
+                                    <div class="particle-loading"></div>
+                                    <div class="particle-loading"></div>
+                                    <div class="particle-loading"></div>
+                                </div>
                             </div>
-                            ${article.url ? `<a href="${article.url}" target="_blank" rel="noopener noreferrer" class="read-more-link" aria-label="Read full article: ${article.title}"><i class="fas fa-external-link-alt me-1"></i>Read Full Article</a>` : ''}
+                            <h3>Analyzing ${industry} Industry</h3>
+                            <p>AI is processing the latest news and market data...</p>
+                        </div>
+                        
+                        <div class="loading-progress-advanced">
+                            <div class="progress-track">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span class="progress-percentage">0%</span>
+                                <span class="progress-label">Initializing...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="loading-steps enhanced">
+                            <div class="loading-step active">
+                                <div class="step-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Searching News Sources</h4>
+                                                                        <p>Fetching latest articles from trusted sources</p>
+                                </div>
+                            </div>
+                            <div class="loading-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>AI Analysis</h4>
+                                    <p>Processing content with Groq Llama 3.1</p>
+                                </div>
+                            </div>
+                            <div class="loading-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Generating Insights</h4>
+                                    <p>Creating comprehensive analysis report</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="loading-stats">
+                            <div class="stat">
+                                <div class="stat-value" id="articles-count">0</div>
+                                <div class="stat-label">Articles Found</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="processing-time">0</div>
+                                <div class="stat-label">Seconds</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="sources-count">0</div>
+                                <div class="stat-label">Sources</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <style>
+                        .loading-container.enhanced {
+                            text-align: center;
+                            padding: 3rem;
+                            max-width: 600px;
+                            margin: 0 auto;
+                        }
+                        
+                        .loading-header {
+                            margin-bottom: 3rem;
+                        }
+                        
+                        .loading-brain {
+                            width: 120px;
+                            height: 120px;
+                            margin: 0 auto 2rem;
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        
+                        .brain-core-loading {
+                            width: 80px;
+                            height: 80px;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            border-radius: 50%;
+                            animation: brainPulseLoading 2s ease-in-out infinite;
+                            box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+                        }
+                        
+                        .loading-particles {
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                        }
+                        
+                        .particle-loading {
+                            position: absolute;
+                            width: 6px;
+                            height: 6px;
+                            background: var(--accent-color);
+                            border-radius: 50%;
+                            animation: particleOrbit 3s linear infinite;
+                        }
+                        
+                        .particle-loading:nth-child(1) { animation-delay: 0s; }
+                        .particle-loading:nth-child(2) { animation-delay: 0.75s; }
+                        .particle-loading:nth-child(3) { animation-delay: 1.5s; }
+                        .particle-loading:nth-child(4) { animation-delay: 2.25s; }
+                        
+                        @keyframes brainPulseLoading {
+                            0%, 100% { transform: scale(1); }
+                            50% { transform: scale(1.1); }
+                        }
+                        
+                        @keyframes particleOrbit {
+                            0% { transform: rotate(0deg) translateX(50px) rotate(0deg); }
+                            100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); }
+                        }
+                        
+                        .loading-progress-advanced {
+                            margin-bottom: 3rem;
+                        }
+                        
+                        .progress-track {
+                            width: 100%;
+                            height: 8px;
+                            background: rgba(255, 255, 255, 0.1);
+                            border-radius: 4px;
+                            overflow: hidden;
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .progress-fill {
+                            height: 100%;
+                            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+                            border-radius: 4px;
+                            width: 0%;
+                            animation: progressFill 8s ease-in-out infinite;
+                        }
+                        
+                        @keyframes progressFill {
+                            0% { width: 0%; }
+                            25% { width: 30%; }
+                            50% { width: 60%; }
+                            75% { width: 85%; }
+                            100% { width: 100%; }
+                        }
+                        
+                        .progress-text {
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: 0.875rem;
+                        }
+                        
+                        .progress-percentage {
+                            color: var(--primary-color);
+                            font-weight: 600;
+                        }
+                        
+                        .progress-label {
+                            color: var(--text-secondary);
+                        }
+                        
+                        .loading-steps.enhanced {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 1.5rem;
+                            margin-bottom: 3rem;
+                        }
+                        
+                        .loading-step {
+                            display: flex;
+                            align-items: center;
+                            gap: 1rem;
+                            padding: 1rem;
+                            background: rgba(255, 255, 255, 0.05);
+                            border-radius: 12px;
+                            border-left: 3px solid transparent;
+                            transition: all 0.3s ease;
+                            opacity: 0.5;
+                        }
+                        
+                        .loading-step.active {
+                            opacity: 1;
+                            border-left-color: var(--primary-color);
+                            background: rgba(99, 102, 241, 0.1);
+                        }
+                        
+                        .step-icon {
+                            width: 48px;
+                            height: 48px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+                            border-radius: 12px;
+                            font-size: 1.25rem;
+                            color: white;
+                        }
+                        
+                        .step-content {
+                            text-align: left;
+                            flex: 1;
+                        }
+                        
+                        .step-content h4 {
+                            margin: 0 0 0.25rem;
+                            color: var(--text-primary);
+                            font-size: 1rem;
+                        }
+                        
+                        .step-content p {
+                            margin: 0;
+                            color: var(--text-secondary);
+                            font-size: 0.875rem;
+                        }
+                        
+                        .loading-stats {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 2rem;
+                            margin-top: 2rem;
+                            padding-top: 2rem;
+                            border-top: 1px solid rgba(255, 255, 255, 0.1);
+                        }
+                        
+                        .stat {
+                            text-align: center;
+                        }
+                        
+                        .stat-value {
+                            font-size: 2rem;
+                            font-weight: 700;
+                            color: var(--primary-color);
+                            display: block;
+                        }
+                        
+                        .stat-label {
+                            font-size: 0.75rem;
+                            color: var(--text-secondary);
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            margin-top: 0.5rem;
+                        }
+                    </style>
+                `;
+            }
+
+            displayResults(data) {
+                const resultsContainer = document.getElementById('results-container');
+                const timestamp = new Date(data.timestamp * 1000).toLocaleString();
+                
+                const analysisHtml = this.parseAnalysisContent(data.analysis);
+                
+                resultsContainer.innerHTML = `
+                    <div class="analysis-results enhanced">
+                        <div class="result-header enhanced">
+                            <div class="header-icon">
+                                <i class="fas fa-chart-line"></i>
+                                <div class="icon-glow"></div>
+                            </div>
+                            <div class="header-content">
+                                <h3>${data.industry} Industry Analysis</h3>
+                                <div class="result-meta">
+                                    <span class="timestamp">
+                                        <i class="fas fa-clock"></i>
+                                        Generated: ${timestamp}
+                                    </span>
+                                    <span class="powered-by">
+                                        <i class="fas fa-robot"></i>
+                                        Powered by Groq Llama 3.1
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="header-actions">
+                                <button class="action-btn" onclick="ragAgent.exportResults()" title="Export Results">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="action-btn" onclick="ragAgent.shareResults()" title="Share Results">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="analysis-content enhanced">
+                            ${analysisHtml}
                         </div>
                     </div>
                 `;
-            });
-            
-            // Display complete analysis with better structure
-            analysisContainer.innerHTML = `
-                <div class="analysis-results">
-                    <div class="analysis-header">
-                        <h3><i class="fas fa-chart-line me-2"></i>${industry} Industry Analysis</h3>
-                        <div class="analysis-meta">
-                            <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Analysis Complete</span>
-                        </div>
-                    </div>
-                    
-                    ${articlesHtml ? `
-                        <div class="articles-section">
-                            <h4><i class="fas fa-newspaper"></i>Latest News Articles <span class="badge bg-primary ms-2">${articles.length} Found</span></h4>
-                            <div class="articles-grid">
-                                ${articlesHtml}
-                            </div>
-                        </div>
-                    ` : ''}
-                    
-                    ${insightHtml ? `
-                        <div class="insights-section">
-                            <h4><i class="fas fa-brain"></i>AI-Powered Market Analysis</h4>
-                            <div class="insight-content">
-                                <div class="analysis-text">${insightHtml.replace(/\n/g, '<br>')}</div>
-                            </div>
-                        </div>
-                    ` : ''}
-                    
-                    <div class="analysis-footer">
-                        <div class="footer-content">
-                            <i class="fas fa-robot me-1"></i>
-                            <small>Powered by RAG News Intelligence Platform by Harjinder Singh</small>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Enhanced scroll behavior for all devices
-            setTimeout(() => {
-                const rect = analysisContainer.getBoundingClientRect();
-                const offset = window.innerHeight * 0.1; // 10% from top
-                window.scrollTo({
-                    top: window.scrollY + rect.top - offset,
-                    behavior: 'smooth'
+                
+                // Add scroll reveal animation to results
+                const resultsElement = resultsContainer.querySelector('.analysis-results');
+                resultsElement.style.opacity = '0';
+                resultsElement.style.transform = 'translateY(30px)';
+                
+                requestAnimationFrame(() => {
+                    resultsElement.style.transition = 'all 0.8s ease';
+                    resultsElement.style.opacity = '1';
+                    resultsElement.style.transform = 'translateY(0)';
                 });
-            }, 150);
+            }
+
+            parseAnalysisContent(content) {
+                // Enhanced content parsing with better formatting
+                return content
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/📌 Article (\d+): (.*?)(?=\n|$)/g, '<div class="article-card"><h4><span class="article-number">$1</span>$2</h4>')
+                    .replace(/📝 \*\*Summary:\*\* (.*?)(?=\n|$)/g, '<div class="article-summary"><p>$1</p></div>')
+                    .replace(/📅 \*\*Published:\*\* (.*?)(?=\n|$)/g, '<div class="article-meta"><span class="meta-item"><i class="fas fa-calendar"></i>$1</span>')
+                    .replace(/📰 \*\*Source:\*\* (.*?)(?=\n|$)/g, '<span class="meta-item"><i class="fas fa-newspaper"></i>$1</span>')
+                    .replace(/🔗 \*\*Read More:\*\* (.*?)(?=\n|$)/g, '<span class="meta-item"><a href="$1" class="article-link" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i>Read Full Article</a></span></div></div>')
+                    .replace(/📊 \*\*Sentiment:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><i class="fas fa-smile"></i><h4>Sentiment Analysis</h4></div><div class="section-content">$1</div></div>')
+                    .replace(/📈 \*\*Market Outlook:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><i class="fas fa-chart-line"></i><h4>Market Outlook</h4></div><div class="section-content">$1</div></div>')
+                    .replace(/🎯 \*\*Key Trends:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><i class="fas fa-bullseye"></i><h4>Key Trends</h4></div><div class="section-content">$1</div></div>')
+                    .replace(/💡 \*\*Strategic Insights:\*\*(.*?)(?=\n|$)/g, '<div class="analysis-section"><div class="section-header"><i class="fas fa-lightbulb"></i><h4>Strategic Insights</h4></div><div class="section-content">$1</div></div>')
+                    .replace(/\n/g, '<br>');
+            }
+
+            showError(message) {
+                const resultsContainer = document.getElementById('results-container');
+                resultsContainer.innerHTML = `
+                    <div class="error-container">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>Analysis Failed</h3>
+                        <p>${message}</p>
+                        <button class="retry-btn" onclick="ragAgent.analyzeIndustry()">
+                            <i class="fas fa-redo"></i>
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
+
+            showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                const icon = {
+                    success: 'check-circle',
+                    error: 'exclamation-circle',
+                    warning: 'exclamation-triangle',
+                    info: 'info-circle'
+                }[type] || 'info-circle';
+                
+                toast.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fas fa-${icon}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Auto remove after 4 seconds
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.style.transform = 'translateX(100%)';
+                        toast.style.opacity = '0';
+                        setTimeout(() => {
+                            toast.remove();
+                        }, 300);
+                    }
+                }, 4000);
+            }
+
+            exportResults() {
+                this.showToast('Export functionality coming soon!', 'info');
+            }
+
+            shareResults() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Industry Analysis Results',
+                        text: 'Check out this AI-powered industry analysis!',
+                        url: window.location.href
+                    });
+                } else {
+                    this.showToast('Share functionality not supported on this browser', 'warning');
+                }
+            }
         }
 
-        // Add keyboard support for better accessibility
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.id === 'industry') {
-                document.getElementById('analysisForm').dispatchEvent(new Event('submit'));
-            }
+        // Initialize the enhanced application
+        document.addEventListener('DOMContentLoaded', () => {
+            window.ragAgent = new EnhancedRAGNewsAgent();
         });
     </script>
 </body>
 </html>
+
