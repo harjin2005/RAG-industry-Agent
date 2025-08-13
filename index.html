@@ -3085,7 +3085,7 @@
             async checkStatus() {
                 try {
                     // Updated to match your app.py endpoints
-                    const response = await fetch('/status');
+                    const response = await fetch('/api/status');
                     const data = await response.json();
                     
                     this.updateStatusIndicator(data.agent_ready);
@@ -3660,4 +3660,5 @@
     </script>
 </body>
 </html>
+
 
