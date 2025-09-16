@@ -1,4 +1,4 @@
-# ?? AI News Intelligence Hub
+#  AI News Intelligence Hub
 
 Advanced RAG-powered news intelligence platform by Harjinder Singh.
 
@@ -16,3 +16,4 @@ Advanced RAG-powered news intelligence platform by Harjinder Singh.
 2. Install: `pip install -r requirements.txt`
 3. Set OPENAI_API_KEY environment variable
 4. Run: `python app.py`
+
