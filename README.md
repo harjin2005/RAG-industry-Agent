@@ -9,7 +9,7 @@ Advanced RAG-powered news intelligence platform by Harjinder Singh.
 - `requirements.txt` - Python dependencies
 
 ## Live Demo
-[Your Render URL here]
+https://rag-industry-agent.onrender.com/
 
 ## Setup
 1. Clone repository
